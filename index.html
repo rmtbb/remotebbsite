@@ -4,108 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REMOTE BB</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.png" type="image/png">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="REMOTE BB">
+    <meta property="og:image" content="/regpreview.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.remotebb.com">
+    <meta property="og:description" content="Cybersecurity, IT/AI/ML, Hosting, Security, Training & Compliance.">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* Basic Reset & Page Setup */
         html, body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            min-height: 100vh; /* Ensure body takes full viewport height */
+            min-height: 100vh;
         }
 
         body {
-            background-color: #f8f8f8; /* Off-white background */
-            color: #222; /* Dark off-black font color */
-            /* Apply imported Poppins font */
+            background-color: #f8f8f8;
+            color: #222;
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             line-height: 1.6;
-            /* Center content directly on body */
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2em; /* Add padding around the content area */
+            padding: 2em;
         }
 
-        /* Main Content Container */
         main {
-            text-align: center; /* Center text within the container */
-            max-width: 800px; /* Optional: constrain max width */
+            text-align: center;
+            max-width: 800px;
         }
 
-        /* Heading Styling - Bolder & More Artistic */
         h1 {
-            font-size: 5.5em; /* Significantly larger heading size */
-            font-weight: 800; /* Extra-bold weight */
-            margin-bottom: 0.4em; /* Adjust space below heading */
-            letter-spacing: 2px; /* Wider letter spacing */
+            font-size: 5.5em;
+            font-weight: 800;
+            margin-bottom: 0.4em;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            line-height: 1.1; /* Tighter line height for large text */
+            line-height: 1.1;
         }
 
-        /* List Styling - Clean & Bold */
         ul {
-            list-style: none; /* Remove default bullet points */
-            padding: 0; /* Remove default padding */
-            margin-top: 2em; /* More space above the list */
-            margin-bottom: 2.5em; /* Add space below the list before the button */
+            list-style: none;
+            padding: 0;
+            margin-top: 2em;
+            margin-bottom: 2.5em;
         }
 
-        /* List Item Styling - Uppercase & Spaced */
         li {
             font-size: 1.1em;
-            font-weight: 400; /* Regular weight for contrast */
+            font-weight: 400;
             margin-bottom: 1.2em;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            /* Add transition for smooth scaling */
             transition: transform 0.2s ease-in-out;
-            cursor: default; /* Indicate text is not directly clickable (unless links are added later) */
+            cursor: default;
         }
 
-        /* --- New: Pulse effect on hover/active --- */
         li:hover,
-        li:active { /* :active helps simulate effect on touch */
-            transform: scale(1.05); /* Slightly scale up */
+        li:active {
+            transform: scale(1.05);
         }
-        /* --- End Pulse Effect --- */
 
-
-        /* --- New: Book Now Button Styling --- */
         .book-button {
-            display: inline-block; /* Allow padding and margin */
-            background-color: #222; /* Dark background */
-            color: #f8f8f8; /* Light text */
+            display: inline-block;
+            background-color: #222;
+            color: #f8f8f8;
             border: none;
-            padding: 12px 30px; /* Vertical and horizontal padding */
-            font-family: inherit; /* Use the body's font */
+            padding: 12px 30px;
+            font-family: inherit;
             font-size: 1em;
-            font-weight: 700; /* Bold weight */
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            border-radius: 4px; /* Slightly rounded corners */
+            border-radius: 4px;
             cursor: pointer;
-            text-decoration: none; /* Remove underline if used as a link */
-            transition: background-color 0.2s ease, transform 0.1s ease; /* Smooth transitions */
-            margin-top: 1em; /* Space above the button */
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            margin-top: 1em;
         }
 
         .book-button:hover,
-        .book-button:focus { /* Add focus state for accessibility */
-            background-color: #444; /* Slightly lighter on hover/focus */
-            outline: none; /* Remove default focus outline if custom style is sufficient */
+        .book-button:focus {
+            background-color: #444;
+            outline: none;
         }
 
         .book-button:active {
-            transform: scale(0.98); /* Slightly shrink on click */
+            transform: scale(0.98);
         }
-        /* --- End Button Styling --- */
 
-
-        /* Responsive Adjustments */
         @media (max-width: 768px) {
             h1 {
                 font-size: 4em;
@@ -120,10 +116,11 @@
                 font-size: 0.95em;
             }
         }
+
         @media (max-width: 480px) {
-             body {
-                 padding: 1em;
-             }
+            body {
+                padding: 1em;
+            }
             h1 {
                 font-size: 3em;
             }
@@ -132,14 +129,13 @@
                 margin-bottom: 1em;
             }
             ul {
-                 margin-bottom: 2em; /* Adjust space */
+                margin-bottom: 2em;
             }
             .book-button {
                 padding: 9px 22px;
                 font-size: 0.9em;
             }
         }
-
     </style>
 </head>
 <body>
@@ -160,22 +156,11 @@
         class="book-button" 
         onclick="window.location.href='https://www.remotebb.com/book'">
         Book Now
-      </button>
-              </main>
+        </button>
+    </main>
 
     <script>
-        // JavaScript can be added here if needed in the future,
-        // for example, to handle the button click.
         console.log("REMOTE BB landing page loaded.");
-
-        // Optional: Add event listener if button needs JS functionality
-        // const bookButton = document.querySelector('.book-button');
-        // if (bookButton) {
-        //     bookButton.addEventListener('click', () => {
-        //         console.log('Book Now button clicked!');
-        //         // Add booking logic here (e.g., show a form, redirect)
-        //     });
-        // }
     </script>
 
 </body>
