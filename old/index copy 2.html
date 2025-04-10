@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta property="og:image" content="regpreview.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="400">
+    <title>Remote BB - IT Consulting Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --light-tan: #d7a673;
+            --light-peach: #ddac7e;
+            --light-beige: #efc497;
+            --sky-blue: #6acbf0;
+            --azure: #66c5ef;
+            --almost-white: #fdfffc;
+            --dark-brown: #1a1613;
+            --forest-green: #456238;
+            --slate-gray: #7c828b;
+            --phonecall-green: #4cd964;
+            --imessage-blue: #007AFF; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-brown);
+            background-color: var(--almost-white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .app-container {
+            max-width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 300px;
+            height: 300px;
+            object-fit: contain;
+        }
+
+        main {
+            width: 100%;
+            max-width: 350px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            font-size: 16px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .gallery-btn, .request-btn {
+            background-color: var(--sky-blue);
+            color: var(--almost-white);
+        }
+
+        .gallery-btn:hover, .request-btn:hover {
+            background-color: var(--azure);
+        }
+
+        .book-btn {
+            background-color: var(--dark-brown);
+            color: var(--almost-white);
+        }
+
+        .projects-panel, .form-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Max out at 3 columns */
+            gap: 10px;
+            padding: 20px 0;
+        }
+
+        .project-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .project-tile img {
+            width: 60px; /* iPhone homescreen icon size */
+            height: 60px; /* iPhone homescreen icon size */
+            border-radius: 15px;
+            transition: filter 0.3s ease;
+        }
+
+        .project-label {
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--dark-brown);
+            text-align: center;
+            word-wrap: break-word; /* Prevent overflow by wrapping long words */
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--slate-gray);
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 600; /* Match button font weight */
+            font-size: 16px; /* Match button font size */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Match button font family */
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--slate-gray);
+        }
+
+        input[type="submit"] {
+            background-color: var(--phonecall-green);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 12px 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #3cb355;
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 380px) {
+            .app-container {
+                padding: 15px;
+            }
+
+            .logo {
+                width: 140px;
+                height: 140px;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 15px;
+            }
+
+            .projects-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="content-wrapper">
+            <header>
+                <img src="logo.png" alt="Remote BB" class="logo">
+            </header>
+            
+        <main>
+            <section class="cta-buttons">
+                <a href="https://www.remotebb.com/book" class="btn book-btn"><i class="fas fa-calendar"></i> Book a Consultation</a>
+                <a href="#" class="btn gallery-btn" onclick="togglePanel('projects-panel')"><i class="fas fa-file-alt"></i> Projects</a>
+                <a href="#" class="btn request-btn" onclick="togglePanel('form-panel')"><i class="fas fa-file-signature"></i> Request a Website Build</a>
+            </section>
+
+            <!-- Projects Panel -->
+            <section id="projects-panel" class="projects-panel">
+                <div class="projects-grid">
+                    <div class="project-tile" onclick="handleTileClick('thebestcookieps.com')">
+                        <img src="thebestcookiepsicon.png" alt="Project 1">
+                        <div class="project-label">thebestcookieps</div>
+                    </div>
+                    <div class="project-tile" onclick="handleTileClick('ggsandwiches.com')">
+                        <img src="ggsandwicheslogo.png" alt="Project 2">
+                        <div class="project-label">ggsandwiches</div>
+                    </div>
+                    <div class="project-tile" onclick="handleTileClick('soxcompliant.com')">
+                        <img src="soxcompliantlogo.png" alt="Project 3">
+                        <div class="project-label">soxcompliant</div>
+                    </div>
+                    <div class="project-tile" onclick="handleTileClick('thealohahandyman.com')">
+                        <img src="thealohahandymanlogo.png" alt="Project 4">
+                        <div class="project-label">thealohahandyman</div>
+                    </div>
+                    <div class="project-tile" onclick="handleTileClick('lowkeytint.com')">
+                        <img src="lowkeylogo.png" alt="Project 5">
+                        <div class="project-label">lowkeytint</div>
+                    </div>
+                    <div class="project-tile" onclick="handleTileClick('brofessional.store')">
+                        <img src="brofessionallogo.png" alt="Project 6">
+                        <div class="project-label">brofessional</div>
+                    </div>
+                    <div class="project-tile" onclick="handleTileClick('ohmyhamsters.com')">
+                        <img src="ohmyhamsterslogo.png" alt="Project 7">
+                        <div class="project-label">ohmyhamsters</div>
+                    </div>
+                    <div class="project-tile" onclick="handleTileClick('regulaite.com')">
+                        <img src="regulaitelogo.png" alt="Project 8">
+                        <div class="project-label">regulaite</div>
+                    </div>
+                    <div class="project-tile" onclick="handleTileClick('superjackthegame.com')">
+                        <img src="superjacklogo.png" alt="Project 9">
+                        <div class="project-label">superjackthegame</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Website Request Form Panel -->
+            <section id="form-panel" class="form-panel">
+                <form action="https://docs.google.com/forms/d/e/1FAIpQLSe8e6Zx4-TS-cCXOEYbX6oVLVqfW9kyQ2gz1U8p56DMoJJIkA/formResponse" method="POST" onsubmit="return validateForm();">
+                    <label class="required" for="entry.1687264589">What is your email address?</label>
+                    <input type="email" id="entry.1687264589" name="entry.1687264589" required>
+
+                    <label class="required" for="entry.95021472">Please confirm your email address</label>
+                    <input type="email" id="entry.95021472" name="entry.95021472" required>
+                    <div id="emailError" class="error"></div>
+
+                    <label class="required" for="entry.1750126153">What is the name of your business?</label>
+                    <input type="text" id="entry.1750126153" name="entry.1750126153" required>
+
+                    <label class="required" for="entry.939792109">Briefly describe what your business does.</label>
+                    <textarea id="entry.939792109" name="entry.939792109" required></textarea>
+
+                    <label for="entry.905120382">Do you already have a domain name purchased?</label>
+                    <input type="text" id="entry.905120382" name="entry.905120382">
+
+                    <label for="entry.1707136063">What would you like your logo to look like?</label>
+                    <textarea id="entry.1707136063" name="entry.1707136063"></textarea>
+
+                    <label for="entry.679603069">Who is your ideal customer or target audience?</label>
+                    <textarea id="entry.679603069" name="entry.679603069"></textarea>
+
+                    <label for="entry.984657492">What’s the story of your business?</label>
+                    <textarea id="entry.984657492" name="entry.984657492"></textarea>
+
+                    <label for="entry.1252608566">What colors or styles would you like for your website?</label>
+                    <textarea id="entry.1252608566" name="entry.1252608566"></textarea>
+
+                    <label for="entry.530821382">What goods or services do you offer?</label>
+                    <textarea id="entry.530821382" name="entry.530821382"></textarea>
+
+                    <label for="entry.919889973">What contact information should be on your website?</label>
+                    <textarea id="entry.919889973" name="entry.919889973"></textarea>
+
+                    <input type="submit" value="Submit">
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> bryan@remotebb.com</p>
+                <p><i class="fas fa-globe"></i> Serving clients worldwide</p>
+            </div>
+            <p class="copyright">&copy; 2024 Remote BB LLC</p>
+        </footer>
+    </div>
+
+    <script>
+        function togglePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null; // Collapse the panel
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px"; // Expand the panel
+            }
+        }
+
+        function handleTileClick(domain) {
+            const url = `https://${domain}`;
+            window.open(url, '_blank');
+        }
+
+        function validateForm() {
+            const email = document.getElementById('entry.1687264589').value;
+            const confirmEmail = document.getElementById('entry.95021472').value;
+            if (email !== confirmEmail) {
+                document.getElementById('emailError').innerText = "Email addresses do not match.";
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
