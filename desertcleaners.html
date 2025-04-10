@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desert Cleaners</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Open Sans', sans-serif;
+      background-color: #F9F6F2;
+      color: #2E2E2E;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 600px;
+    }
+
+    .logo {
+      max-width: 180px;
+      width: 100%;
+      height: auto;
+      margin: 0 auto 1.5rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      background-color: #C97D60;
+      color: white;
+      border: none;
+      padding: 0.9rem 2rem;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background-color: #b96c51;
+    }
+
+    .note {
+      margin-top: 0.75rem;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .logo {
+        max-width: 140px;
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Upload your logo and replace the src below -->
+    <img src="logonotext.png" alt="Desert Cleaners Logo" class="logo" />
+    
+    <h1>DESERT CLEANERS</h1>
+    <p>Professional home cleaning services for La Quinta, Palm Desert, Indian Wells, Palm Springs, and Indio.<br />Reliable, personal, and spotless.</p>
+    <a class="btn" href="https://calendar.app.google/zY4dXomszAW3c1it8" target="_blank" rel="noopener">BOOK NOW</a>
+    <div class="note">Limited slots available weekly</div>
+  </div>
+
+  <script>
+    document.querySelector('.btn').addEventListener('click', () => {
+      console.log('Booking button clicked!');
+    });
+  </script>
+</body>
+</html>
