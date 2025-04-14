@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft 365 Interactive Presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+        .progress-bar {
+            height: 5px;
+            background: linear-gradient(90deg, #0078D4 0%, #50E6FF 100%);
+            transition: width 0.3s ease;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #0078D4;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .highlight-box {
+            background: rgba(0, 120, 212, 0.1);
+            border-left: 4px solid #0078D4;
+            transition: all 0.3s ease;
+        }
+        .highlight-box:hover {
+            background: rgba(0, 120, 212, 0.2);
+            transform: translateX(5px);
+        }
+        .checkpoint {
+            position: relative;
+            padding-left: 30px;
+        }
+        .checkpoint:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            background-color: #0078D4;
+            border-radius: 50%;
+        }
+        .checkpoint:after {
+            content: "✓";
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            color: white;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="fixed top-0 left-0 right-0 z-10">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-20 max-w-5xl">
+        <!-- Header Section -->
+        <header class="text-center mb-12 slide-in">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-400 text-white p-8 rounded-xl shadow-lg">
+                <i class="fab fa-microsoft text-6xl mb-4"></i>
+                <h1 class="text-4xl font-bold mb-2">Simplifying Microsoft 365 with Remote BB</h1>
+                <h2 class="text-2xl font-semibold">Mastering Teams, SharePoint & OneDrive</h2>
+                <div class="mt-6">
+                    <button onclick="startPresentation()" class="bg-white text-blue-600 px-6 py-2 rounded-full font-bold hover:bg-blue-50 transition-all">
+                        Start Presentation <i class="fas fa-play ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Sidebar -->
+        <div class="fixed left-4 top-1/2 transform -translate-y-1/2 bg-white p-4 rounded-xl shadow-lg z-20 hidden md:block">
+            <div class="flex flex-col space-y-3">
+                <button onclick="navigateTo(1)" class="nav-btn bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-200 transition-all tooltip" data-section="1">
+                    <i class="fab fa-microsoft"></i>
+                    <span class="tooltiptext">Understanding Teams</span>
+                </button>
+                <button onclick="navigateTo(2)" class="nav-btn bg-gray-100 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all tooltip" data-section="2">
+                    <i class="fas fa-share-alt"></i>
+                    <span class="tooltiptext">Demystifying SharePoint</span>
+                </button>
+                <button onclick="navigateTo(3)" class="nav-btn bg-gray-100 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all tooltip" data-section="3">
+                    <i class="fas fa-cloud"></i>
+                    <span class="tooltiptext">Navigating OneDrive</span>
+                </button>
+                <button onclick="navigateTo(4)" class="nav-btn bg-gray-100 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all tooltip" data-section="4">
+                    <i class="fas fa-lock"></i>
+                    <span class="tooltiptext">Security & Permissions</span>
+                </button>
+                <button onclick="navigateTo(5)" class="nav-btn bg-gray-100 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all tooltip" data-section="5">
+                    <i class="fas fa-tasks"></i>
+                    <span class="tooltiptext">Daily Workflow</span>
+                </button>
+                <button onclick="navigateTo(6)" class="nav-btn bg-gray-100 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all tooltip" data-section="6">
+                    <i class="fas fa-star"></i>
+                    <span class="tooltiptext">Best Practices</span>
+                </button>
+                <button onclick="navigateTo(7)" class="nav-btn bg-gray-100 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all tooltip" data-section="7">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span class="tooltiptext">Technical Concerns</span>
+                </button>
+                <button onclick="navigateTo(8)" class="nav-btn bg-gray-100 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all tooltip" data-section="8">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="tooltiptext">Getting Help</span>
+                </button>
+                <button onclick="navigateTo(9)" class="nav-btn bg-gray-100 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all tooltip" data-section="9">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="tooltiptext">Wrap-Up</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Presentation Sections -->
+        <div class="space-y-12">
+            <!-- Section 1: Understanding Teams -->
+            <div id="section1" class="section">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden slide-in">
+                    <div class="bg-blue-600 p-4 text-white flex items-center">
+                        <i class="fab fa-microsoft text-2xl mr-3"></i>
+                        <h2 class="text-2xl font-bold">Understanding Microsoft Teams</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-users mr-2"></i> Teams & Channels 101
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Standard Channels</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Visible to all team members</li>
+                                        <li>Files stored in main SharePoint</li>
+                                        <li>Great for general collaboration</li>
+                                    </ul>
+                                </div>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Private Channels</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Only visible to specific members</li>
+                                        <li>Files stored in separate SharePoint site</li>
+                                        <li>Deleted channels can be restored within 30 days</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-6 highlight-box p-4 rounded-lg">
+                                <h4 class="font-bold mb-2">Channel vs. Chat</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="font-semibold text-blue-600">Channels</p>
+                                        <p>For structured, ongoing collaboration</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-blue-600">Chats</p>
+                                        <p>For informal, quick conversations</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-video mr-2"></i> Meetings & Recordings
+                            </h3>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Recordings automatically saved in OneDrive (personal meetings) or SharePoint (channel meetings)</li>
+                                    <li>Available indefinitely unless retention policy applied</li>
+                                    <li>Easy sharing with team members</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-user-plus mr-2"></i> External Collaboration
+                            </h3>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <p class="font-bold mb-2">How to invite guests:</p>
+                                <ol class="list-decimal pl-5 space-y-1">
+                                    <li>Go to Team → <span class="font-mono">•••</span> → Add Member</li>
+                                    <li>Enter external email address</li>
+                                    <li>Configure guest permissions with IT assistance</li>
+                                </ol>
+                                <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                                    <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                                    <span>Guest access must be enabled by your IT admin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Demystifying SharePoint -->
+            <div id="section2" class="section">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden slide-in">
+                    <div class="bg-blue-600 p-4 text-white flex items-center">
+                        <i class="fas fa-share-alt text-2xl mr-3"></i>
+                        <h2 class="text-2xl font-bold">Demystifying SharePoint</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-link mr-2"></i> Integration with Teams
+                            </h3>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>SharePoint stores all files from Teams channels</li>
+                                    <li>Standard channels share a common SharePoint site</li>
+                                    <li>Private channels have dedicated SharePoint sites</li>
+                                    <li>Seamless access from both platforms</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-file-alt mr-2"></i> File Management & Version Control
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Folders</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Simple organization</li>
+                                        <li>Intuitive structure</li>
+                                        <li>Easy to navigate</li>
+                                    </ul>
+                                </div>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Metadata</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Advanced filtering capabilities</li>
+                                        <li>Ideal for larger libraries</li>
+                                        <li>Customizable columns</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <h4 class="font-bold mb-2">Document Recovery</h4>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Restore documents via SharePoint's <strong>Version History</strong></li>
+                                    <li>Recover deleted files from <strong>Recycle Bin</strong> (93-day retention)</li>
+                                    <li>Compare different versions side by side</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-shield-alt mr-2"></i> Permissions and Access
+                            </h3>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Assign permissions via groups (preferred) or individuals</li>
+                                    <li>Limit editing by clicking <span class="font-mono">•••</span> → <strong>Manage Access</strong> on files/folders</li>
+                                    <li>External partners require guest access setup by IT</li>
+                                </ul>
+                                <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                                    <i class="fas fa-lightbulb text-blue-600 mr-2"></i>
+                                    <span>Use permission groups instead of individual assignments for easier management</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Navigating OneDrive -->
+            <div id="section3" class="section">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden slide-in">
+                    <div class="bg-blue-600 p-4 text-white flex items-center">
+                        <i class="fas fa-cloud text-2xl mr-3"></i>
+                        <h2 class="text-2xl font-bold">Navigating OneDrive</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-bullseye mr-2"></i> Purpose & Security
+                            </h3>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Use OneDrive for personal files or limited sharing</li>
+                                    <li>Files are private by default unless explicitly shared</li>
+                                    <li>Secure cloud storage with enterprise-grade protection</li>
+                                    <li>Access files from anywhere, on any device</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-users mr-2"></i> Sharing & Collaboration
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Co-authoring</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Simultaneous editing allowed</li>
+                                        <li>Changes sync automatically</li>
+                                        <li>See who's working on the document</li>
+                                    </ul>
+                                </div>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Secure sharing</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Control permissions precisely</li>
+                                        <li>Set expiration dates and passwords</li>
+                                        <li>Access via <strong>Share → Link settings</strong></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-folder-open mr-2"></i> File Management
+                            </h3>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Recover deleted files via OneDrive Recycle Bin (30-day default)</li>
+                                    <li>Move files easily via <span class="font-mono">•••</span> → <strong>Move to</strong> → Select SharePoint destination</li>
+                                    <li>Sync files for offline access</li>
+                                    <li>Automatic versioning of documents</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Security & Permissions -->
+            <div id="section4" class="section">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden slide-in">
+                    <div class="bg-blue-600 p-4 text-white flex items-center">
+                        <i class="fas fa-lock text-2xl mr-3"></i>
+                        <h2 class="text-2xl font-bold">Security & Permissions Made Easy</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-user-shield mr-2"></i> Managing Permissions
+                            </h3>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Check access via SharePoint file details (<strong>Manage Access</strong>)</li>
+                                    <li>Request custom permission groups from IT (e.g., "Finance Managers")</li>
+                                    <li>When employees leave:
+                                        <ul class="list-disc pl-5 mt-1">
+                                            <li>IT/admin moves files from user's OneDrive</li>
+                                            <li>Removes user from all groups</li>
+                                            <li>Reassigns ownership of shared documents</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600 flex items-center">
+                                <i class="fas fa-database mr-2"></i> Sensitivity & Data Protection
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Sensitivity Labels</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Apply via file settings (e.g., Confidential, Internal-only)</li>
+                                        <li>IT provides label setup and configuration</li>
+                                        <li>Labels can enforce encryption and restrictions</li>
+                                    </ul>
+                                </div>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">External Sharing</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Avoid "Anyone with link" for sensitive data</li>
+                                        <li>Prefer named users with expirations</li>
+                                        <li>Set password protection when needed</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-blue-600 mr-2"></i>
+                                <span>Always verify sharing settings before sending sensitive documents externally</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Daily Workflow -->
+            <div id="section5" class="section">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden slide-in">
+                    <div class="bg-blue-600 p-4 text-white flex items-center">
+                        <i class="fas fa-tasks text-2xl mr-3"></i>
+                        <h2 class="text-2xl font-bold">Daily Workflow: Real-life Examples</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div class="highlight-box p-4 rounded-lg">
+                                <h3 class="text-lg font-bold mb-3 text-blue-600">Project Setup</h3>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Create standard channels for different aspects</li>
+                                    <li>Upload files to the appropriate channels</li>
+                                    <li>Initiate conversations clearly using @mentions</li>
+                                    <li>Set up recurring meetings in channel calendar</li>
+                                </ul>
+                            </div>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <h3 class="text-lg font-bold mb-3 text-blue-600">Sensitive Projects</h3>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Create private channels for confidential topics</li>
+                                    <li>Files automatically secure and limited to channel members</li>
+                                    <li>Use sensitivity labels for additional protection</li>
+                                    <li>Set expiration dates on shared links</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="highlight-box p-4 rounded-lg">
+                                <h3 class="text-lg font-bold mb-3 text-blue-600">Drafting Documents</h3>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Draft privately in OneDrive</li>
+                                    <li>Share with limited collaborators initially</li>
+                                    <li>Use comments and @mentions for feedback</li>
+                                    <li>Move to SharePoint when finalized for broader access</li>
+                                </ul>
+                            </div>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <h3 class="text-lg font-bold mb-3 text-blue-600">Employee Departure</h3>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Admin moves important files to SharePoint</li>
+                                    <li>Removes user from Teams/groups immediately</li>
+                                    <li>Reassigns ownership of critical documents</li>
+                                    <li>Reviews sharing links created by the user</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6: Best Practices -->
+            <div id="section6" class="section">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden slide-in">
+                    <div class="bg-blue-600 p-4 text-white flex items-center">
+                        <i class="fas fa-star text-2xl mr-3"></i>
+                        <h2 class="text-2xl font-bold">Practical Best Practices</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-8">
+                            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h3 class="text-lg font-bold mb-2 text-blue-600 flex items-center">
+                                        <i class="fas fa-file-signature mr-2"></i> Naming Conventions
+                                    </h3>
+                                    <p>Format files as:</p>
+                                    <p class="font-mono bg-gray-100 p-2 rounded mt-1">ProjectName_Date_Description.ext</p>
+                                    <p class="mt-2 text-sm">Example: Budget_Q3_2023_FinalReview.xlsx</p>
+                                </div>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h3 class="text-lg font-bold mb-2 text-blue-600 flex items-center">
+                                        <i class="fas fa-calendar-check mr-2"></i> Scheduled Reviews
+                                    </h3>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Quarterly checks on permissions</li>
+                                        <li>Review inactive teams/channels</li>
+                                        <li>Archive completed projects</li>
+                                        <li>Clean up old versions</li>
+                                    </ul>
+                                </div>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h3 class="text-lg font-bold mb-2 text-blue-600 flex items-center">
+                                        <i class="fas fa-mobile-alt mr-2"></i> Offline & Mobile
+                                    </h3>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Use OneDrive Sync for offline files</li>
+                                        <li>Mobile app for easy scanning and upload</li>
+                                        <li>Set up notifications for important updates</li>
+                                        <li>Enable biometric security on mobile</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 7: Technical Concerns -->
+            <div id="section7" class="section">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden slide-in">
+                    <div class="bg-blue-600 p-4 text-white flex items-center">
+                        <i class="fas fa-exclamation-triangle text-2xl mr-3"></i>
+                        <h2 class="text-2xl font-bold">Handling Common Technical Concerns</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600">Known Issues</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Syncing Delays</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Symptoms: Changes not appearing across devices</li>
+                                        <li>Fix: Manual refresh or sync client restart</li>
+                                        <li>Prevention: Keep client updated</li>
+                                    </ul>
+                                </div>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Channel Deletion</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Symptoms: Accidentally deleted channel</li>
+                                        <li>Fix: Restore from Teams admin within 30 days</li>
+                                        <li>Prevention: Set deletion permissions carefully</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600">System Features</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Backups</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Automatic backup of SharePoint/OneDrive by IT</li>
+                                        <li>Version history for individual files</li>
+                                        <li>Recycle bin retention periods</li>
+                                    </ul>
+                                </div>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Mobile Access</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Teams, OneDrive, SharePoint apps available</li>
+                                        <li>Consistent experience across devices</li>
+                                        <li>Offline access to recently viewed files</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 8: Getting Help -->
+            <div id="section8" class="section">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden slide-in">
+                    <div class="bg-blue-600 p-4 text-white flex items-center">
+                        <i class="fas fa-question-circle text-2xl mr-3"></i>
+                        <h2 class="text-2xl font-bold">Getting Further Help</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="highlight-box p-4 rounded-lg">
+                                <h3 class="text-lg font-bold mb-3 text-blue-600 flex items-center">
+                                    <i class="fas fa-headset mr-2"></i> IT Support
+                                </h3>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Always available during business hours</li>
+                                    <li>Submit tickets via company portal</li>
+                                    <li>Direct contact for urgent issues</li>
+                                    <li>Escalation process for complex problems</li>
+                                </ul>
+                            </div>
+                            <div class="highlight-box p-4 rounded-lg">
+                                <h3 class="text-lg font-bold mb-3 text-blue-600 flex items-center">
+                                    <i class="fas fa-graduation-cap mr-2"></i> Training
+                                </h3>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Regular Microsoft-provided training resources</li>
+                                    <li>Monthly webinars on new features</li>
+                                    <li>Recorded sessions available on demand</li>
+                                    <li>Custom training for departments available</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 9: Wrap-Up -->
+            <div id="section9" class="section">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden slide-in">
+                    <div class="bg-blue-600 p-4 text-white flex items-center">
+                        <i class="fas fa-check-circle text-2xl mr-3"></i>
+                        <h2 class="text-2xl font-bold">Wrap-Up & Action Items</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600">Key Takeaways</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Regular Organization</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Maintain clear folder structures</li>
+                                        <li>Follow document naming conventions</li>
+                                        <li>Archive old projects periodically</li>
+                                    </ul>
+                                </div>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Security Awareness</h4>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Consistently apply permissions</li>
+                                        <li>Use sensitivity labels appropriately</li>
+                                        <li>Review sharing links regularly</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-blue-600">Immediate Steps</h3>
+                            <div class="space-y-4">
+                                <div class="checkpoint p-3 bg-blue-50 rounded-lg">
+                                    Review your Teams structure today
+                                </div>
+                                <div class="checkpoint p-3 bg-blue-50 rounded-lg">
+                                    Start following outlined best practices immediately
+                                </div>
+                                <div class="checkpoint p-3 bg-blue-50 rounded-lg">
+                                    Schedule a quarterly review in your calendar
+                                </div>
+                                <div class="checkpoint p-3 bg-blue-50 rounded-lg">
+                                    Bookmark the IT support portal for quick access
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="fixed bottom-4 left-0 right-0 flex justify-center z-20">
+            <div class="bg-white p-3 rounded-full shadow-lg flex space-x-2">
+                <button onclick="prevSection()" class="bg-gray-100 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button onclick="nextSection()" class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-700 transition-all">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        const totalSections = 9;
+        
+        // Initialize presentation
+        function startPresentation() {
+            document.querySelector('header').classList.add('hidden');
+            navigateTo(1);
+        }
+        
+        // Navigate to specific section
+        function navigateTo(sectionNumber) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(`section${sectionNumber}`).classList.add('active');
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-100', 'text-blue-600');
+                btn.classList.add('bg-gray-100', 'text-gray-600');
+            });
+            
+            const activeBtn = document.querySelector(`.nav-btn[data-section="${sectionNumber}"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-gray-100', 'text-gray-600');
+                activeBtn.classList.add('bg-blue-100', 'text-blue-600');
+            }
+            
+            // Update progress bar
+            const progressPercentage = (sectionNumber / totalSections) * 100;
+            document.getElementById('progressBar').style.width = `${progressPercentage}%`;
+            
+            currentSection = sectionNumber;
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Next section
+        function nextSection() {
+            if (currentSection < totalSections) {
+                navigateTo(currentSection + 1);
+            } else {
+                // Optional: Loop back to first section
+                navigateTo(1);
+            }
+        }
+        
+        // Previous section
+        function prevSection() {
+            if (currentSection > 1) {
+                navigateTo(currentSection - 1);
+            } else {
+                // Optional: Loop to last section
+                navigateTo(totalSections);
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                nextSection();
+            } else if (event.key === 'ArrowLeft') {
+                prevSection();
+            } else if (event.key >= '1' && event.key <= '9') {
+                navigateTo(parseInt(event.key));
+            }
+        });
+    </script>
+</body>
+</html>
