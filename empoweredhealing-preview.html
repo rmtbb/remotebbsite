@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Empowered Healing | Therapeutic Massage & Sacred Healing Space</title>
+  <meta name="description" content="Intuitive therapeutic massage and healing services in Vancouver, WA by Chelsea Giles"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #EFE7E1;
+      color: #656565;
+      line-height: 1.7;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', serif;
+      color: #393939;
+      font-weight: 600;
+    }
+    .hero {
+      background-color: #EFE7E1;
+    }
+    .btn-primary {
+      background-color: #6E2D91;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #A67EB5;
+      box-shadow: 0 4px 12px rgba(166, 126, 181, 0.3);
+    }
+    .service-card {
+      background-color: #F8F5F9;
+      transition: transform 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+    }
+    .divider {
+      border-color: #7A8B7A;
+      opacity: 0.3;
+    }
+    .testimonial-bg {
+      background-color: #F8F5F9;
+    }
+    footer {
+      background-color: #6E2D91;
+    }
+    .quote-icon::before {
+      content: '"';
+      font-size: 3rem;
+      line-height: 0;
+      position: absolute;
+      top: 1rem;
+      left: 0;
+      opacity: 0.2;
+    }
+    .highlight-accent {
+      color: #7A8B7A;
+    }
+    .section-spacing {
+      padding: 5rem 0;
+    }
+    @media (max-width: 768px) {
+      .section-spacing {
+        padding: 3rem 0;
+      }
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+  <!-- Hero Section -->
+  <section class="hero min-h-screen flex flex-col items-center justify-center text-center px-6 section-spacing">
+    <div class="max-w-6xl mx-auto">
+      <div class="mb-8">
+        <img src="./images/logo-transparent-1024.png" alt="Empowered Healing Logo" class="mx-auto w-40 md:w-70 lg:w-80" />
+      </div>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl mb-6">Empowered Healing</h1>
+      <h2 class="text-xl md:text-2xl font-light mb-10">Intuitive Therapeutic Massage & Sacred Healing Space<br/>Vancouver, WA</h2>
+      <a href="https://empoweredhealing.intakeq.com/booking" class="btn-primary text-white font-semibold py-4 px-10 rounded-lg inline-block uppercase tracking-wide text-sm mb-3">Book Now</a>
+      <p class="text-gray-500 text-sm">Click 'Book Now' to start your healing journey.</p>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="py-16 px-6 bg-white section-spacing">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl md:text-4xl text-center mb-16">Our Services</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="service-card p-8 rounded-lg shadow-md text-center">
+          <h3 class="text-xl font-bold mb-4">Therapeutic Table Massage</h3>
+          <p>Rooted in deep tissue, fascia release, and intuitive flow, this session is ideal for pain relief, recovery, or rebalancing the nervous system.</p>
+        </div>
+        <div class="service-card p-8 rounded-lg shadow-md text-center">
+          <h3 class="text-xl font-bold mb-4">Healing Thai Massage</h3>
+          <p>A sacred, floor-based massage that combines movement, breath, and acupressure to promote deep restoration.</p>
+        </div>
+        <div class="service-card p-8 rounded-lg shadow-md text-center">
+          <h3 class="text-xl font-bold mb-4">Custom Integrative Sessions</h3>
+          <p>A fusion of modalities personalized to your body — focused on nervous system regulation and whole-body healing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="py-16 px-6 bg-[#EFE7E1] section-spacing">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl text-center mb-16">About Chelsea</h2>
+      <div class="relative">
+        <blockquote class="italic font-serif text-xl md:text-2xl text-center mb-8 relative pl-12 quote-icon">
+          Healing is always taking place. Sometimes we just need a reminder of how far we've come.
+        </blockquote>
+      </div>
+      <div class="space-y4 text-center">
+        <p class="mb-4">Chelsea Giles has been a licensed massage therapist since 2007, with over 20 years of experience in healing work. Through Empowered Healing, she offers massage that is intuitive, deeply therapeutic, and rooted in compassion.</p>
+        <p class="mb-4">Her approach blends structure with energy — drawing from deep tissue, Thai massage, and nervous system support. She has collaborated with chiropractors, acupuncturists, yoga and meditation teachers, and believes that true healing addresses the whole self.</p>
+        <p>Whether you're recovering, in chronic pain, or simply seeking peace, Chelsea offers sacred space for your journey.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="py-16 px-6 testimonial-bg section-spacing">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl md:text-4xl text-center mb-16">What Clients Say</h2>
+      <div class="grid md:grid-cols-2 gap-8" id="testimonials-container">
+        <!-- Testimonials will load here dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking Section -->
+  <section class="py-16 px-6 bg-white section-spacing">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl mb-10">Book a Session</h2>
+      <div class="space-y-4 mb-10">
+        <p class="flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="highlight-accent" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          120 NE 117th Ave, Vancouver, WA 98684
+        </p>
+        <p class="flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="highlight-accent" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2c-3.16-.37-6.15-2-8.63-3.07a19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.18 4A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.2.91.48 1.83.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          (360) 909-3771
+        </p>
+        <p class="flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="highlight-accent" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Available by appointment
+        </p>
+        <p class="flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="highlight-accent" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+          Gift certificates available — they never expire
+        </p>
+      </div>
+      <a href="https://empoweredhealing.intakeq.com/booking" class="btn-primary text-white font-semibold py-4 px-10 rounded-lg inline-block uppercase tracking-wide text-sm">Book Now</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-10 px-6">
+    <div class="max-w-4xl mx-auto text-center text-[#A67EB5]">
+      <p class="mb-4">License #MA60055690</p>
+      <p class="mb-4">© 2025 Empowered Healing by Chelsea Giles</p>
+      <a href="#" class="hover:text-white transition">Read Reviews on Google</a>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="fixed bottom-6 right-6 bg-[#6E2D91] text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-[#A67EB5]">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+
+  <script>
+    const backToTopButton = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.remove('opacity-0', 'invisible');
+        backToTopButton.classList.add('opacity-100', 'visible');
+      } else {
+        backToTopButton.classList.remove('opacity-100', 'visible');
+        backToTopButton.classList.add('opacity-0', 'invisible');
+      }
+    });
+
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    const testimonials = [
+      {
+        text: `"I have been receiving massage therapy treatments from Chelsea for many years. She is awesome at adapting her style to meet my needs. Sometimes I want deep tissue, sometime gentle or somewhere in between."`,
+        author: "– Tenaya Virgin"
+      },
+      {
+        text: `"Chelsea is an amazing, transformative, connected healer... I have had 100's of massages, dozens of people around the country and she stands alone in her ability, energy, & in the way she approaches healing."`,
+        author: "– Ben Alexander"
+      },
+      {
+        text: `"Chelsea is an amazing clinician with great therapeutic skills. Her therapy space is a cocoon of healing and comfort. Chelsea takes the time to understand the needs of her clients."`,
+        author: "– Jane Robinson"
+      },
+      {
+        text: `"Blessings abound when you enter the healing sanctuary with Chelsea... kind and compassionate and highly intuitive in melding with you heart, soul and body in assisting you in your healing journey."`,
+        author: "– Maggie Peyton"
+      },
+      {
+        text: `"Kind, knowledgeable, highly skilled, massage therapist. A true professional that can feel where the tension goes. My pain relief is immediate! So grateful."`,
+        author: "– Steven Zerfing LMT"
+      }
+    ];
+
+    function showRandomTestimonials() {
+      const container = document.getElementById('testimonials-container');
+      const shuffled = [...testimonials].sort(() => 0.5 - Math.random()).slice(0, 2);
+      container.innerHTML = shuffled.map(t => `
+        <div class="p-6 bg-white rounded-lg shadow-sm">
+          <p class="italic font-serif mb-4">${t.text}</p>
+          <p class="font-semibold text-gray-600">${t.author}</p>
+        </div>
+      `).join('');
+    }
+
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+      section.style.opacity = '0';
+      section.style.transform = 'translateY(20px)';
+      section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    });
+
+    function fadeInSections() {
+      sections.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        if (sectionTop < window.innerHeight - 100) {
+          section.style.opacity = '1';
+          section.style.transform = 'translateY(0)';
+        }
+      });
+    }
+
+    window.addEventListener('load', () => {
+      fadeInSections();
+      showRandomTestimonials();
+    });
+    window.addEventListener('scroll', fadeInSections);
+    setInterval(showRandomTestimonials, 10000);
+  </script>
+</body>
+</html>
