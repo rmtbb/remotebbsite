@@ -18,7 +18,7 @@
   <meta property="og:image" content="https://github.com/rmtbb/remotebbsite/blob/main/empoweredhealthimages/regpreview.png?raw=true">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200"> <meta property="og:image:height" content="630"> <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.google.com"> <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:url" content="https://www.remotebb.com/empoweredhealing-preview.html"> <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Empowered Healing | Therapeutic Massage & Sacred Healing Space">
   <meta name="twitter:description" content="Intuitive therapeutic massage and healing services in Vancouver, WA by Chelsea Giles.">
   <meta name="twitter:image" content="https://github.com/rmtbb/remotebbsite/blob/main/empoweredhealthimages/regpreview.png?raw=true">
@@ -65,14 +65,16 @@
       background-color: #6E2D91;
     }
     .quote-icon::before {
-      content: '"';
-      font-size: 3rem;
-      line-height: 0;
+      content: '“ '; /* Using a more decorative opening quote */
+      font-family: 'Cormorant Garamond', serif; /* Ensures it matches headings */
+      font-size: 8rem; /* Made it larger for a more dramatic effect */
+      line-height: 1;
       position: absolute;
-      top: 1rem;
-      left: 0;
-      opacity: 0.2;
-    }
+      top: -1.5rem; /* Adjusted to pull it up correctly */
+      left: -1rem;  /* Adjusted to position it to the left */
+      opacity: 0.1; /* Made it a bit more subtle */
+      z-index: 1; /* Ensures it stays behind the text */
+}
     .highlight-accent {
       color: #7A8B7A;
     }
@@ -87,14 +89,14 @@
   </style>
 </head>
 <body class="overflow-x-hidden">
-  <section class="hero min-h-screen flex flex-col items-center justify-center text-center px-6 section-spacing">
+  <section class="hero min-h-screen flex flex-col items-center justify-center text-center px-6 pt-8 pb-8 md:py-20">
     <div class="max-w-6xl mx-auto">
       <div class="mb-8">
-        <img src="https://github.com/rmtbb/remotebbsite/blob/main/empoweredhealthimages/logo-transparent-1024.png?raw=true" alt="Empowered Healing Logo" class="mx-auto w-40 md:w-70 lg:w-80" />
+        <img src="https://github.com/rmtbb/remotebbsite/blob/main/empoweredhealthimages/logo-transparent-1024.png?raw=true" alt="Empowered Healing Logo" class="mx-auto w-48 md:w-56 lg:w-64" />
       </div>
       <h1 class="text-4xl md:text-5xl lg:text-6xl mb-6">Empowered Healing</h1>
       <h2 class="text-xl md:text-2xl font-light mb-10">Intuitive Therapeutic Massage & Sacred Healing Space<br/>Vancouver, WA</h2>
-      <a href="https://empoweredhealing.intakeq.com/booking" class="btn-primary text-white font-semibold py-4 px-10 rounded-lg inline-block uppercase tracking-wide text-sm mb-3">Book Now</a>
+      <a href="https://empoweredhealing.remotebb.com/booking" class="btn-primary text-white font-semibold py-4 px-10 rounded-lg inline-block uppercase tracking-wide text-sm mb-3">Book Now</a>
       <p class="text-gray-500 text-sm">Click 'Book Now' to start your healing journey.</p>
     </div>
   </section>
@@ -102,19 +104,19 @@
   <section class="py-16 px-6 bg-white section-spacing">
       <h2 class="text-3xl md:text-4xl text-center mb-16">Our Services</h2>
       <div class="grid md:grid-cols-3 gap-8">
-        <a href="https://empoweredhealing.intakeq.com/booking" class="block">
+        <a href="https://empoweredhealing.remotebb.com/booking" class="block">
           <div class="service-card p-8 rounded-lg shadow-md text-center h-full">
             <h3 class="text-xl font-bold mb-4">Therapeutic Table Massage</h3>
             <p>Rooted in deep tissue, fascia release, and intuitive flow, this session is ideal for pain relief, recovery, or rebalancing the nervous system.</p>
           </div>
         </a>
-        <a href="https://empoweredhealing.intakeq.com/booking" class="block">
+        <a href="https://empoweredhealing.remotebb.com/booking" class="block">
           <div class="service-card p-8 rounded-lg shadow-md text-center h-full">
             <h3 class="text-xl font-bold mb-4">Healing Thai Massage</h3>
             <p>A sacred, floor-based massage that combines movement, breath, and acupressure to promote deep restoration.</p>
           </div>
         </a>
-        <a href="https://empoweredhealing.intakeq.com/booking" class="block">
+        <a href="https://empoweredhealing.remotebb.com/booking" class="block">
           <div class="service-card p-8 rounded-lg shadow-md text-center h-full">
             <h3 class="text-xl font-bold mb-4">Custom Integrative Sessions</h3>
             <p>A fusion of modalities personalized to your body — focused on nervous system regulation and whole-body healing.</p>
@@ -127,16 +129,17 @@
   <section class="py-16 px-6 bg-[#EFE7E1] section-spacing">
     <div class="max-w-3xl mx-auto">
       <h2 class="text-3xl md:text-4xl text-center mb-16">About Chelsea</h2>
-        <div class="relative">
-        <blockquote class="italic font-serif     md:text-2xl text-center mb-8 relative pl-12 quote-icon viewBox="0 0 24 24"">
-          Healing is always taking place. Sometimes we just need a reminder of how far we've come.
-        </blockquote>
-      </div>
       <div class="space-y4 text-center">
         <p class="mb-4">Chelsea Giles has been a licensed massage therapist since 2007, with over 20 years of experience in healing work. Through Empowered Healing, she offers massage that is intuitive, deeply therapeutic, and rooted in compassion.</p>
         <p class="mb-4">Her approach blends structure with energy — drawing from deep tissue, Thai massage, and nervous system support. She has collaborated with chiropractors, acupuncturists, yoga and meditation teachers, and believes that true healing addresses the whole self.</p>
         <p>Whether you're recovering, in chronic pain, or simply seeking peace, Chelsea offers sacred space for your journey.</p>
-      </div>
+        </br>
+        </br>
+        <p class="italic font-serif z-index:5 md:text-2xl text-center mb-8 relative">
+        Healing is always taking place.</br>Sometimes we just need a reminder of how far we've come.
+        </p>
+  
+    </div>
     </div>
   </section>
 
@@ -170,7 +173,7 @@
         </p>
       </div>
 
-      <a href="https://empoweredhealing.intakeq.com/booking" class="btn-primary text-white font-semibold py-4 px-10 rounded-lg inline-block uppercase tracking-wide text-sm">Book Now</a>
+      <a href="https://empoweredhealing.remotebb.com/booking" class="btn-primary text-white font-semibold py-4 px-10 rounded-lg inline-block uppercase tracking-wide text-sm">Book Now</a>
     </div>
 
   </section>
@@ -179,7 +182,7 @@
     <div class="max-w-4xl mx-auto text-center text-[#A67EB5]">
       <p class="mb-4">License #MA60055690</p>
       <p class="mb-4">© 2025 Empowered Healing by Chelsea Giles</p>
-      <a href="#" class="hover:text-white transition">Read Reviews on Google</a>
+      <a href="https://www.remotebb.com/" class="hover:text-white transition text-sm">Site by Remote BB</a>
     </div>
   </footer>
 
@@ -263,4 +266,3 @@
   </script>
 </body>
 </html>
-```
