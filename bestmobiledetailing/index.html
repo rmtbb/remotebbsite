@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Best Mobile Detailing — Coachella Valley</title>
+  <meta name="description" content="Best Mobile Detailing in the Coachella Valley since 1987. Mobile washes and detailing with simple, fast booking." />
+  <meta name="theme-color" content="#0A84FF" />
+  <style>
+    :root {
+      --fg: #0b0c0d;
+      --muted: #5b5e62;
+      --accent-blue: #0A84FF;
+      --accent-green: #10B981;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; background: #ffffff; color: var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+    .wrap {
+      min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+      padding: 32px 20px; max-width: 560px; margin: 0 auto; text-align: center;
+    }
+    .logo {
+      display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;
+    }
+    .logo svg { width: 60px; height: 60px; margin-bottom: 12px; }
+    h1 { font-size: clamp(28px, 7vw, 42px); margin: 0 0 8px; }
+    .tagline { font-size: clamp(14px, 4vw, 18px); color: var(--muted); margin: 0 0 28px; }
+
+    .btn { display: block; width: 100%; text-decoration: none; color: #fff; font-weight: 600;
+      padding: 16px 18px; border-radius: 14px; margin-top: 12px; text-align: center; }
+    .btn-call { background: var(--accent-green); }
+    .btn-book { background: var(--accent-blue); }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  </style>
+</head>
+<body>
+  <a class="sr-only" href="#actions">Skip to actions</a>
+  <main class="wrap">
+    <div class="logo">
+      <!-- Minimal logo: car outline with a droplet -->
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 44h48l-6-16H14l-6 16z" stroke="black" stroke-width="3" fill="none"/>
+        <circle cx="20" cy="44" r="4" fill="black"/>
+        <circle cx="44" cy="44" r="4" fill="black"/>
+        <path d="M32 8c-4 6-8 10-8 14a8 8 0 1 0 16 0c0-4-4-8-8-14z" fill="#0A84FF"/>
+      </svg>
+      <h1>Best Mobile Detailing</h1>
+    </div>
+    <p class="tagline">Best Mobile Detailing in the Coachella Valley since 1987</p>
+
+    <div id="actions">
+      <a class="btn btn-call" href="tel:+17605551234" aria-label="Call Best Mobile Detailing now">Call Now</a>
+      <a class="btn btn-book" href="https://booking.example.com" target="_blank" rel="noopener" aria-label="Book an appointment">Book Appointment</a>
+    </div>
+  </main>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutomotiveBusiness",
+    "name": "Best Mobile Detailing",
+    "description": "Best Mobile Detailing in the Coachella Valley since 1987.",
+    "areaServed": "Coachella Valley, CA",
+    "telephone": "+1-760-555-1234",
+    "url": "https://your-domain.com",
+    "openingHours": "Mo-Su 07:00-19:00",
+    "priceRange": "$$$"
+  }
+  </script>
+</body>
+</html>
