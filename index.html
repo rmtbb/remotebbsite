@@ -66,7 +66,7 @@
             letter-spacing: 1.5px;
             text-transform: uppercase;
             transition: transform 0.2s ease-in-out;
-            cursor: default;
+            cursor: pointer;
         }
 
         li:hover,
@@ -100,6 +100,45 @@
 
         .book-button:active {
             transform: scale(0.98);
+        }
+
+        /* Portfolio Section */
+        .portfolio {
+            display: none;
+            margin-top: 1.5em;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1em;
+            margin-top: 1em;
+        }
+
+        .portfolio-item {
+            background: #eee;
+            border-radius: 6px;
+            padding: 0.8em;
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .portfolio-item:hover {
+            transform: scale(1.05);
+        }
+
+        .portfolio-item a {
+            text-decoration: none;
+            color: #222;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5em;
+        }
+
+        .portfolio-item p {
+            font-size: 0.85em;
+            margin: 0;
+            color: #555;
         }
 
         @media (max-width: 768px) {
@@ -145,11 +184,65 @@
         <ul>
             <li>CYBERSECURITY</li>
             <li>IT / AI / ML</li>
-            <li>WEB HOSTING</li>
+            <li onclick="window.location.href='https://www.remotebb.com/bbhost-index'">WEB HOSTING</li>
+            <li onclick="togglePortfolio()">WEB DESIGN</li>
             <li>SECURITY</li>
             <li>TRAINING</li>
             <li>COMPLIANCE</li>
         </ul>
+
+        <div id="portfolio" class="portfolio">
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <a href="https://www.thebestcookieps.com/" target="_blank">THE BEST COOKIE PS</a>
+                    <p>Bakery site with menu and shipping</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.thealohahandyman.com/" target="_blank">The Aloha Handyman</a>
+                    <p>Handyman services in Maui</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.eh-massage.com/" target="_blank">EH Massage</a>
+                    <p>Massage therapy with booking info</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.lowkeytint.com/" target="_blank">Lowkey Tint</a>
+                    <p>Auto & commercial window tinting</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.remotebb.com/" target="_blank">Remote BB</a>
+                    <p>IT, AI, and security services hub</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://brofessional.store/" target="_blank">Brofessional Store</a>
+                    <p>Online shop for branded apparel</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://remotebb.com/luxurymobile" target="_blank">Luxury Mobile Car Care</a>
+                    <p>Mobile car detailing services</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://remotebb.com/superjack" target="_blank">Superjack: The Game</a>
+                    <p>Card game order page</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://remotebb.com/letterfun" target="_blank">Letterfun</a>
+                    <p>Experimental alphabet learning tool</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://remotebb.com/bbhost-index" target="_blank">BB Host</a>
+                    <p>Hosting and domain management portal</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.gabinascuisine.com/" target="_blank">Gabina’s Cuisine</a>
+                    <p>Restaurant site with menu and catering</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.remotebb.com/desertcleaners/" target="_blank">Desert Cleaners</a>
+                    <p>Cleaning service booking portal</p>
+                </div>
+            </div>
+        </div>
 
         <button 
         type="button" 
@@ -160,6 +253,10 @@
     </main>
 
     <script>
+        function togglePortfolio() {
+            const portfolio = document.getElementById("portfolio");
+            portfolio.style.display = (portfolio.style.display === "block") ? "none" : "block";
+        }
         console.log("REMOTE BB landing page loaded.");
     </script>
 
