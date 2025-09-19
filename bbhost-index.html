@@ -77,6 +77,7 @@
             text-decoration: none;
             font-size: 16px;
             transition: 0.2s ease-in-out;
+            cursor: pointer;
         }
 
         .btn:hover {
@@ -99,6 +100,57 @@
             font-size: 16px;
         }
 
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Portfolio (hidden by default, brutalist/minimal) */
+        .portfolio {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.35s ease, opacity 0.3s ease;
+            margin-top: 0;
+            border: 0 solid #222;
+            padding: 0;
+        }
+
+        .portfolio.open {
+            max-height: 2000px; /* plenty of room to expand */
+            opacity: 1;
+            margin-top: 15px;
+            border-width: 2px;
+            padding: 16px;
+            background: transparent;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 20px;
+        }
+
+        .portfolio-item a {
+            display: inline-block;
+            text-decoration: none;
+            color: #222;
+            border-bottom: 2px solid #222;
+            padding-bottom: 2px;
+        }
+
+        .portfolio-item a:hover {
+            background: #222;
+            color: #F5F5F5;
+        }
+
+        .portfolio-item p {
+            margin-top: 6px;
+            font-size: 14px;
+            color: #444;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
@@ -116,6 +168,10 @@
 
             .plan {
                 padding: 15px;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -168,19 +224,100 @@
             </ul>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSchnJHEsA8WqVYmjOhs-kbxeH48AFistexcwO7QyRG3LGtzog/viewform?usp=pp_url&entry.1446371368=ELITE+($50/mo)" class="btn">Sign Up</a>
         </div>
+
         <!-- Website Services Section -->
         <div class="services">
             <h2>Need a Website Built?</h2>
             <p>We don’t just host. We build. Our team creates custom, modern websites tailored to your needs.</p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSe8e6Zx4-TS-cCXOEYbX6oVLVqfW9kyQ2gz1U8p56DMoJJIkA/viewform" class="btn">Make Website</a>
-        </div>
-        <p>Questions? <a href="mailto:hosting@remotebb.com">Contact Us</a></p>
 
+            <!-- Buttons row: Make Website + Example Sites toggle -->
+            <div class="btn-row">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSe8e6Zx4-TS-cCXOEYbX6oVLVqfW9kyQ2gz1U8p56DMoJJIkA/viewform" class="btn">Make Website</a>
+                <button id="togglePortfolio" class="btn" aria-expanded="false" aria-controls="portfolio">EXAMPLE SITES</button>
+            </div>
+
+            <!-- Hidden Portfolio (unfolds down) -->
+            <div id="portfolio" class="portfolio">
+                <div class="portfolio-grid">
+                    <div class="portfolio-item">
+                        <a href="https://www.thebestcookieps.com/" target="_blank" rel="noopener">THE BEST COOKIE PS</a>
+                        <p>Bakery site with menu and shipping</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://www.thealohahandyman.com/" target="_blank" rel="noopener">The Aloha Handyman</a>
+                        <p>Handyman services in Maui</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://www.eh-massage.com/" target="_blank" rel="noopener">EH Massage</a>
+                        <p>Massage therapy with booking info</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://www.lowkeytint.com/" target="_blank" rel="noopener">Lowkey Tint</a>
+                        <p>Auto & commercial window tinting</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://www.remotebb.com/" target="_blank" rel="noopener">Remote BB</a>
+                        <p>IT, AI, and security services hub</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://brofessional.store/" target="_blank" rel="noopener">Brofessional Store</a>
+                        <p>Online shop for branded apparel</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://remotebb.com/luxurymobile" target="_blank" rel="noopener">Luxury Mobile Car Care</a>
+                        <p>Mobile car detailing services</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://remotebb.com/superjack" target="_blank" rel="noopener">Superjack: The Game</a>
+                        <p>Card game order page</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://remotebb.com/letterfun" target="_blank" rel="noopener">Letterfun</a>
+                        <p>Experimental alphabet learning tool</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://remotebb.com/bbhost-index" target="_blank" rel="noopener">BB Host</a>
+                        <p>Hosting and domain management portal</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://www.gabinascuisine.com/" target="_blank" rel="noopener">Gabina’s Cuisine</a>
+                        <p>Restaurant site with menu and catering</p>
+                    </div>
+                    <div class="portfolio-item">
+                        <a href="https://www.remotebb.com/desertcleaners" target="_blank" rel="noopener">Desert Cleaners</a>
+                        <p>Cleaning service booking portal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p>Questions? <a href="mailto:hosting@remotebb.com">Contact Us</a></p>
     </div>
 
     <script>
         // Basic console log for debugging
         console.log("BBHosting site loaded.");
+
+        // Portfolio toggle logic
+        (function () {
+            const toggleBtn = document.getElementById('togglePortfolio');
+            const portfolio = document.getElementById('portfolio');
+
+            if (!toggleBtn || !portfolio) return;
+
+            toggleBtn.addEventListener('click', function () {
+                const isOpen = portfolio.classList.toggle('open');
+                toggleBtn.setAttribute('aria-expanded', String(isOpen));
+                toggleBtn.textContent = isOpen ? 'HIDE EXAMPLES' : 'EXAMPLE SITES';
+                // Optional: scroll into view when opening
+                if (isOpen) {
+                    // Wait for expand animation to start
+                    setTimeout(() => {
+                        portfolio.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 150);
+                }
+            });
+        })();
     </script>
 </body>
 </html>
