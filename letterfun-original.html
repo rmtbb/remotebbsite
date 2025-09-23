@@ -2,17 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Letter Fun for Teslas by Remote BB">
-  <meta property="og:description" content="Tap, type, and watch letters dance with delightful animations.">
-  <meta property="og:image" content="https://example.com/your-og-image-1200x630.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:url" content="https://example.com/your-page-url">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Letter Fun for Teslas by Remote BB">
-  <meta name="twitter:description" content="Tap, type, and watch letters dance with delightful animations.">
-  <meta name="twitter:image" content="https://example.com/your-twitter-image-1200x600.jpg">
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Letter Fun for Teslas by Remote BB</title>
   <style>
@@ -51,7 +40,6 @@
       user-select:none; -webkit-user-select:none;
       transition:transform 120ms ease, color 120ms ease, text-shadow 120ms ease;
       text-align:center;
-      will-change: transform, color, text-shadow;
     }
     .letter.empty::after{content:"";}
 
@@ -148,30 +136,9 @@
     }
     .is-wobbling{animation:fx-wobble 700ms ease-out both;}
 
-    /* Extra class-based effects */
-    @keyframes fx-pop { 0%{transform:scale(0.9)} 50%{transform:scale(1.25)} 100%{transform:scale(1)} }
-    .is-pop{animation:fx-pop 420ms cubic-bezier(.2,.8,.2,1) both;}
-
-    @keyframes fx-swing { 20%{transform:rotate(12deg)} 40%{transform:rotate(-9deg)} 60%{transform:rotate(6deg)} 80%{transform:rotate(-3deg)} 100%{transform:rotate(0)} }
-    .is-swing{animation:fx-swing 700ms ease-out both;}
-
-    @keyframes fx-flip {
-      0%{transform:rotateX(0) scale(1)}
-      50%{transform:rotateX(180deg) scale(1.12); color:var(--accent-3)}
-      100%{transform:rotateX(360deg) scale(1)}
-    }
-    .is-flip{animation:fx-flip 800ms ease both; transform-style:preserve-3d;}
-
-    @keyframes fx-zoomspin {
-      0%{transform:scale(0.9) rotate(0deg)}
-      50%{transform:scale(1.2) rotate(180deg); color:var(--accent-4)}
-      100%{transform:scale(1) rotate(360deg)}
-    }
-    .is-zoomspin{animation:fx-zoomspin 800ms ease-in-out both;}
-
     /* ---------- Generated visuals ---------- */
-    .burst,.confetti,.ring,.trail,.stars{position:absolute; inset:0; pointer-events:none;}
-    .burst span,.ring span,.stars i{
+    .burst,.confetti,.ring,.trail{position:absolute; inset:0; pointer-events:none;}
+    .burst span,.ring span{
       position:absolute; font-weight:800; opacity:0; transform:translate(-50%,-50%) scale(0.6);
     }
     @keyframes fx-burst {
@@ -203,9 +170,6 @@
     }
     .ring span{animation:fx-ring 900ms ease-out forwards; color:var(--accent-4); }
 
-    /* Star swirl */
-    .stars i{ font-style:normal; color:var(--accent-5); opacity:.9; }
-
     /* When random pressed with no letter, flash border to hint */
     .stage.flash{ box-shadow: inset 0 0 0 4px var(--accent-2); animation: fx-flash 600ms ease-out; }
     @keyframes fx-flash {
@@ -217,8 +181,7 @@
     @media (prefers-reduced-motion: reduce) {
       .is-shaking,.is-pulsing,.is-spinning,.is-bouncing,.is-rainbow,
       .is-jelly,.is-tilting,.is-glowing,.is-squash,.is-wobbling,
-      .is-pop,.is-swing,.is-flip,.is-zoomspin,
-      .burst span,.confetti i,.trail b,.ring span,.stars i{
+      .burst span,.confetti i,.trail b,.ring span{
         animation-duration:1ms !important;
       }
     }
@@ -281,46 +244,23 @@
     /* Clicks: letters / blank / ? / toggles */
     document.addEventListener('click', (e) => {
       const b = e.target.closest('button');
-      if (b) {
-        if (b.dataset.char !== undefined) {
-          // If blank button pressed, clear with exit
-          if (b.dataset.char === '') {
-            clearWithExit();
-          } else {
-            handleCharInput(b.dataset.char);
-          }
-          return;
-        }
-        if (b === alignToggle) { cycleAlign(); return; }
-        if (b === buttonsToggle) { cycleButtonSize(); return; }
-        if (b === sizeToggle) { cycleLetterSize(); return; }
+      if (!b) return;
+
+      if (b.dataset.char !== undefined) {
+        handleCharInput(b.dataset.char);
+        return;
       }
+      if (b === alignToggle) { cycleAlign(); return; }
+      if (b === buttonsToggle) { cycleButtonSize(); return; }
+      if (b === sizeToggle) { cycleLetterSize(); return; }
     });
 
-    /* Tap/Click the big stage or letter = random animation */
-    stage.addEventListener('click', (e) => {
-      // Ignore if a button was clicked (handled above)
-      if (e.target.closest('button')) return;
-      doRandomAction();
-    });
-
-    /* Keyboard: A–Z, '?', Space(blank), Backspace/Delete(clear with exit), Enter(random) */
+    /* Keyboard: A–Z, '?', Space(blank) */
     document.addEventListener('keydown', (e) => {
       const k = e.key;
-      if (/^[a-z]$/i.test(k)) {
-        handleCharInput(k.toUpperCase());
-      } else if (k === '?' || (k === '/' && e.shiftKey)) {
-        handleCharInput('?');
-      } else if (k === ' ' || k === 'Spacebar') {
-        e.preventDefault();
-        clearWithExit();
-      } else if (k === 'Backspace' || k === 'Delete') {
-        e.preventDefault();
-        clearWithExit();
-      } else if (k === 'Enter' || k === 'Return') {
-        e.preventDefault();
-        doRandomAction();
-      }
+      if (/^[a-z]$/i.test(k)) handleCharInput(k.toUpperCase());
+      else if (k === '?') handleCharInput('?');
+      else if (k === ' ') { e.preventDefault(); handleCharInput(''); }
     });
 
     function handleCharInput(ch) {
@@ -368,9 +308,7 @@
     /* -------- Random Effects (class & generated) -------- */
     const classEffects = [
       'is-shaking','is-pulsing','is-spinning','is-bouncing','is-rainbow',
-      'is-jelly','is-tilting','is-glowing','is-squash','is-wobbling',
-      // extra ones
-      'is-pop','is-swing','is-flip','is-zoomspin'
+      'is-jelly','is-tilting','is-glowing','is-squash','is-wobbling'
     ];
 
     function doRandomAction() {
@@ -384,7 +322,7 @@
       if (Math.random() < 0.5) {
         applyClassEffect();
       } else {
-        const generators = [burstLetters, confetti, ringLetters, echoTrail, starSwirl, ripplePulse];
+        const generators = [burstLetters, confetti, ringLetters, echoTrail];
         const fn = generators[Math.floor(Math.random() * generators.length)];
         fn(display.textContent);
       }
@@ -488,204 +426,10 @@
       setTimeout(() => layer.remove(), 900);
     }
 
-    // Swirling stars around the letter
-    function starSwirl(ch) {
-      const layer = document.createElement('div');
-      layer.className = 'stars';
-      stage.appendChild(layer);
-      const center = centerOf(display, stage);
-      const n = 10 + Math.floor(Math.random()*6);
-      const radius = 30;
-      for (let i = 0; i < n; i++) {
-        const star = document.createElement('i');
-        star.textContent = '✦';
-        star.style.left = center.x + 'px';
-        star.style.top = center.y + 'px';
-        star.style.fontSize = (14 + Math.random()*10) + 'px';
-        const ang = (i/n) * Math.PI*2;
-        const dx = Math.cos(ang) * (radius + Math.random()*40);
-        const dy = Math.sin(ang) * (radius + Math.random()*40);
-        star.animate([
-          { transform:'translate(-50%,-50%) scale(0.5)', opacity:0 },
-          { transform:`translate(${dx-50}px, ${dy-50}px) scale(1)`, opacity:1, offset:0.4 },
-          { transform:`translate(${dx*1.8-50}px, ${dy*1.8-50}px) scale(0.8)`, opacity:0 }
-        ], { duration: 900 + Math.random()*300, easing:'ease-out', fill:'forwards' });
-        layer.appendChild(star);
-      }
-      setTimeout(() => layer.remove(), 1400);
-    }
-
-    // Ripple pulse from the letter center
-    function ripplePulse() {
-      const center = centerOf(display, stage);
-      const ring = document.createElement('div');
-      ring.style.position = 'absolute';
-      ring.style.left = center.x + 'px';
-      ring.style.top = center.y + 'px';
-      ring.style.width = '6px';
-      ring.style.height = '6px';
-      ring.style.borderRadius = '999px';
-      ring.style.border = '3px solid var(--accent)';
-      ring.style.transform = 'translate(-50%,-50%)';
-      ring.style.opacity = '0.9';
-      stage.appendChild(ring);
-      ring.animate([
-        { transform:'translate(-50%,-50%) scale(1)', opacity:0.9 },
-        { transform:'translate(-50%,-50%) scale(20)', opacity:0 }
-      ], { duration: 900, easing: 'ease-out', fill:'forwards' });
-      setTimeout(()=>ring.remove(), 1000);
-    }
-
     function centerOf(el, relativeTo) {
       const r1 = el.getBoundingClientRect();
       const r2 = relativeTo.getBoundingClientRect();
       return { x: r1.left - r2.left + r1.width/2, y: r1.top - r2.top + r1.height/2 };
-    }
-
-    /* ---------- Clear with exit animations ---------- */
-    const exitAnimations = [
-      rocketExit, tumbleOff, slideDownFade, swirlAway, popExplode, driftUp, flipDrop
-    ];
-
-    function clearWithExit() {
-      const ch = display.textContent;
-      if (!ch) {
-        stage.classList.add('flash');
-        setTimeout(() => stage.classList.remove('flash'), 600);
-        return;
-      }
-      // Clone the letter visually to animate out
-      const ghost = document.createElement('div');
-      const rect = display.getBoundingClientRect();
-      const srect = stage.getBoundingClientRect();
-      ghost.textContent = ch;
-      ghost.style.position = 'absolute';
-      ghost.style.left = (rect.left - srect.left) + 'px';
-      ghost.style.top = (rect.top - srect.top) + 'px';
-      ghost.style.width = rect.width + 'px';
-      ghost.style.height = rect.height + 'px';
-      ghost.style.font = getComputedStyle(display).font;
-      ghost.style.fontWeight = '800';
-      ghost.style.lineHeight = '1';
-      ghost.style.color = getComputedStyle(display).color;
-      ghost.style.display = 'flex';
-      ghost.style.alignItems = 'center';
-      ghost.style.justifyContent = 'center';
-      ghost.style.pointerEvents = 'none';
-      stage.appendChild(ghost);
-
-      // Clear the actual display immediately
-      setDisplay('');
-
-      // Pick and run an exit animation on the ghost
-      const fn = exitAnimations[Math.floor(Math.random()*exitAnimations.length)];
-      fn(ghost, stage);
-    }
-
-    // --- Exit animation implementations ---
-
-    // Rocket exits up-right with trail of copies
-    function rocketExit(ghost, root){
-      const start = ghost.getBoundingClientRect();
-      const copies = 6;
-      for (let i=0;i<copies;i++){
-        const c = ghost.cloneNode(true);
-        c.style.opacity = 0.12 + (i*0.05);
-        c.style.filter = 'blur(1px)';
-        root.appendChild(c);
-        c.animate([
-          { transform:'translate(0,0) scale(1)' },
-          { transform:`translate(${60+ i*18}px, ${-120 - i*24}px) scale(${0.9 - i*0.06})`, opacity:0 }
-        ], { duration: 900, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards' });
-        setTimeout(()=>c.remove(), 950);
-      }
-      ghost.animate([
-        { transform:'translate(0,0) rotate(0deg)', offset:0 },
-        { transform:'translate(12px,-18px) rotate(8deg)', offset:0.2 },
-        { transform:`translate(${start.width*0.8}px, ${-start.height*1.4}px) rotate(18deg)`, opacity:0 }
-      ], { duration: 850, easing:'ease-in', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 900);
-    }
-
-    // Tumbles diagonally out
-    function tumbleOff(ghost){
-      ghost.animate([
-        { transform:'translate(0,0) rotate(0deg)', opacity:1 },
-        { transform:'translate(120px,-80px) rotate(180deg) scale(0.7)', opacity:0 }
-      ], { duration: 800, easing:'ease-in-out', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 820);
-    }
-
-    // Slides down and fades
-    function slideDownFade(ghost){
-      ghost.animate([
-        { transform:'translate(0,0)', opacity:1 },
-        { transform:'translate(0,120%)', opacity:0 }
-      ], { duration: 600, easing:'ease-in', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 620);
-    }
-
-    // Swirls into a tiny point
-    function swirlAway(ghost){
-      ghost.animate([
-        { transform:'translate(0,0) rotate(0deg) scale(1)', opacity:1 },
-        { transform:'translate(0,0) rotate(540deg) scale(0.05)', opacity:0 }
-      ], { duration: 900, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 920);
-    }
-
-    // Pops into confetti
-    function popExplode(ghost){
-      const center = centerOf(ghost, stage);
-      confettiAt(center.x, center.y);
-      ghost.animate([
-        { transform:'scale(1)', opacity:1 },
-        { transform:'scale(0.6)', opacity:0 }
-      ], { duration: 220, easing:'ease-out', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 240);
-    }
-
-    // Gentle drift up and fade
-    function driftUp(ghost){
-      ghost.animate([
-        { transform:'translateY(0)', opacity:1 },
-        { transform:'translateY(-80px)', opacity:0 }
-      ], { duration: 700, easing:'ease-out', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 740);
-    }
-
-    // Flip then drop out bottom
-    function flipDrop(ghost){
-      ghost.style.transformOrigin = '50% 60%';
-      ghost.animate([
-        { transform:'rotateX(0deg) translateY(0)', opacity:1 },
-        { transform:'rotateX(80deg) translateY(20px)', opacity:0.9, offset:0.3 },
-        { transform:'rotateX(100deg) translateY(140%)', opacity:0 }
-      ], { duration: 800, easing:'ease-in', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 820);
-    }
-
-    // helper to spawn confetti at custom point (used by popExplode)
-    function confettiAt(x, y){
-      const layer = document.createElement('div');
-      layer.className = 'confetti';
-      stage.appendChild(layer);
-      const colors = [ 'var(--accent)', 'var(--accent-2)', 'var(--accent-3)', 'var(--accent-4)', 'var(--accent-5)' ];
-      const count = 24 + Math.floor(Math.random() * 20);
-      for (let i = 0; i < count; i++) {
-        const dot = document.createElement('i');
-        dot.style.left = x + 'px';
-        dot.style.top = y + 'px';
-        dot.style.background = colors[i % colors.length];
-        dot.style.width = (6 + Math.random()*6)+'px';
-        dot.style.height = dot.style.width;
-        dot.animate([
-          { transform:'translate(-50%,-50%) translateX(0) translateY(-10px) rotate(0deg)', opacity:0.9 },
-          { transform:`translate(-50%,-50%) translateX(${Math.random()*200-100}px) translateY(${100 + Math.random()*120}px) rotate(${Math.random()*360}deg)`, opacity:0 }
-        ], { duration: 700 + Math.random()*300, easing:'ease-out', fill:'forwards' });
-        layer.appendChild(dot);
-      }
-      setTimeout(() => layer.remove(), 1200);
     }
 
     // Init
