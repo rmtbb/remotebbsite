@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Remote BB · Super Simple iCloud Sync Troubleshooting</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #111833;
+      --text: #e9eefc;
+      --muted: #b9c3e8;
+      --accent: #7aa2ff;
+      --accent-2: #9ef0ff;
+      --ok: #2ecc71;
+      --warn: #ffd166;
+      --danger: #ff6b6b;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 16px;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 70% -10%, #1e2a62 0%, #0b1020 60%) no-repeat,
+                  radial-gradient(1000px 600px at -10% 110%, #102049 0%, #0b1020 60%) no-repeat,
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      padding: 28px 20px 12px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      user-select: none;
+    }
+    .logo {
+      width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: var(--shadow);
+    }
+    h1 { font-size: 1.2rem; margin: 0; letter-spacing: .3px; }
+    .tagline { color: var(--muted); font-size: .9rem; text-align: center; margin-top: 6px; }
+
+    .app {
+      max-width: 860px; margin: 18px auto 36px; padding: 0 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .progress {
+      display: grid; grid-template-columns: 48px 1fr; gap: 14px; align-items: center;
+      padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+    }
+    .progress-ring { display: grid; grid-auto-flow: column; gap: 8px; align-items: center; }
+    .dot {
+      width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.28);
+      transition: transform .25s ease, background .25s ease; transform: translateZ(0);
+    }
+    .dot.active { background: var(--accent); transform: scale(1.2); }
+    .dot.done { background: var(--ok); }
+    .progress-text { color: var(--muted); font-size: .9rem; }
+
+    .step {
+      padding: 22px 20px 12px;
+    }
+    .step h2 { margin: 0 0 10px; font-size: 1.3rem; }
+    .step .why { color: var(--muted); font-size: .95rem; margin: 0 0 16px; }
+
+    .checklist { display: grid; gap: 12px; margin: 16px 0; }
+    .item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 12px 14px; }
+    .item strong { display: block; margin-bottom: 6px; font-weight: 600; }
+    .muted { color: var(--muted); }
+
+    details { border: 1px dashed rgba(255,255,255,0.18); border-radius: 10px; padding: 10px 12px; }
+    summary { cursor: pointer; font-weight: 600; }
+    details + details { margin-top: 12px; }
+
+    .actions {
+      display: flex; gap: 12px; justify-content: space-between; padding: 16px; border-top: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+    }
+    .left, .right { display: flex; gap: 12px; }
+
+    button {
+      appearance: none; border: none; border-radius: 12px; padding: 12px 16px; font-weight: 700; letter-spacing: .2px;
+      background: rgba(122,162,255,0.12); color: var(--text); cursor: pointer;
+      transition: transform .06s ease, background .2s ease, box-shadow .2s ease;
+      box-shadow: 0 6px 16px rgba(122,162,255,0.15) inset, 0 1px 0 rgba(255,255,255,0.1);
+    }
+    button:hover { background: rgba(122,162,255,0.2); }
+    button:active { transform: translateY(1px); }
+    .primary { background: linear-gradient(180deg, rgba(122,162,255,0.35), rgba(122,162,255,0.22)); }
+    .danger { background: linear-gradient(180deg, rgba(255,107,107,0.35), rgba(255,107,107,0.22)); }
+    .ghost { background: rgba(255,255,255,0.08); }
+    .link { background: transparent; text-decoration: underline; box-shadow: none; padding-left: 4px; padding-right: 4px; }
+
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+           padding: 2px 6px; border-radius: 6px; font-size: .9em; }
+
+    footer { text-align: center; color: var(--muted); font-size: .9rem; margin-top: 18px; }
+
+    a { color: var(--accent-2); }
+
+    /* Accessibility helpers */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  </style>
+</head>
+<body>
+  <header aria-label="Remote BB header">
+    <div class="logo" aria-hidden="true"></div>
+    <div>
+      <h1>Remote BB · Super Simple iCloud Sync Troubleshooting</h1>
+      <div class="tagline">One step at a time. We’ll wait for you before moving on.</div>
+    </div>
+  </header>
+
+  <main class="app" id="app">
+    <section class="card" aria-live="polite" aria-atomic="true">
+      <div class="progress">
+        <div class="progress-ring" id="dots" aria-hidden="true"></div>
+        <div class="progress-text" id="progressText">Step 1 of N</div>
+      </div>
+
+      <div class="step" id="step"></div>
+
+      <div class="actions">
+        <div class="left">
+          <button id="backBtn" class="ghost" aria-label="Go to previous step">◀ Back</button>
+          <button id="restartBtn" class="ghost" aria-label="Restart troubleshooting">↺ Restart</button>
+        </div>
+        <div class="right">
+          <button id="printBtn" class="ghost" title="Print or Save as PDF">🖶 Print</button>
+          <button id="nextBtn" class="primary" aria-label="Go to next step">Next ▶</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Made with ❤️ by Remote BB • This guide focuses on iCloud syncing for <strong>Messages</strong> and <strong>Contacts</strong> (and related iCloud data) on macOS & iOS.
+    </footer>
+  </main>
+
+  <template id="tpl-welcome">
+    <h2 id="stepTitle">Welcome</h2>
+    <p class="why">We’ll walk through quick checks to get iCloud syncing your <strong>Messages</strong> & <strong>Contacts</strong> across devices.</p>
+    <div class="checklist">
+      <div class="item"><strong>What you’ll need</strong>
+        Your Mac and your iPhone/iPad nearby, connected to Wi‑Fi, and the Apple ID password.
+      </div>
+      <div class="item"><strong>How it works</strong>
+        Complete one small step, then click <em>Next</em>. You can always go <em>Back</em>.
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-appleid">
+    <h2 id="stepTitle">Use the same Apple ID on all devices</h2>
+    <p class="why">iCloud only syncs between devices signed into the <em>same</em> Apple ID.</p>
+    <details open>
+      <summary>On your <strong>Mac</strong></summary>
+      <ol>
+        <li>Open <span class="kbd">System Settings</span> → click your name at the top.</li>
+        <li>Confirm the Apple ID email shown matches the one on your iPhone.</li>
+      </ol>
+    </details>
+    <details>
+      <summary>On your <strong>iPhone/iPad</strong></summary>
+      <ol>
+        <li>Open <span class="kbd">Settings</span> → tap your name at the top.</li>
+        <li>Confirm it’s the same Apple ID as your Mac.</li>
+      </ol>
+    </details>
+  </template>
+
+  <template id="tpl-network-time">
+    <h2 id="stepTitle">Internet & time settings</h2>
+    <p class="why">No internet or wrong time can pause syncing.</p>
+    <div class="checklist">
+      <div class="item"><strong>Wi‑Fi works?</strong> Open a webpage (e.g., apple.com). If it won’t load, fix the connection first.</div>
+      <div class="item"><strong>Set date & time automatically</strong>
+        <ul>
+          <li><em>Mac:</em> <span class="kbd">System Settings → General → Date & Time</span> → <strong>Set automatically</strong> On.</li>
+          <li><em>iPhone/iPad:</em> <span class="kbd">Settings → General → Date & Time</span> → <strong>Set Automatically</strong> On.</li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-status">
+    <h2 id="stepTitle">Check Apple’s iCloud status</h2>
+    <p class="why">Rarely, Apple’s servers have outages. If iCloud is down, wait until Apple marks it green again.</p>
+    <div class="item">
+      Open Apple’s status page: <a href="https://www.apple.com/support/systemstatus/" target="_blank" rel="noopener">apple.com/support/systemstatus</a>
+    </div>
+  </template>
+
+  <template id="tpl-icloud-toggles">
+    <h2 id="stepTitle">Turn iCloud on for Contacts, Calendars & iCloud Drive</h2>
+    <p class="why">If a service is off on any device, data won’t sync.</p>
+    <details open>
+      <summary>On your <strong>Mac</strong></summary>
+      <ol>
+        <li><span class="kbd">System Settings → [Your Name] → iCloud</span>.</li>
+        <li>Turn on <strong>Contacts</strong>, <strong>Calendars</strong>, and <strong>iCloud Drive</strong>.</li>
+        <li>(Optional) In iCloud Drive <em>Options…</em>, enable <strong>Desktop & Documents Folders</strong> if you want those to sync.</li>
+      </ol>
+    </details>
+    <details>
+      <summary>On your <strong>iPhone/iPad</strong></summary>
+      <ol>
+        <li><span class="kbd">Settings → [Your Name] → iCloud</span>.</li>
+        <li>Tap <em>Show All</em> → turn on <strong>Contacts</strong>, <strong>Calendars</strong>, and <strong>iCloud Drive</strong>.</li>
+      </ol>
+    </details>
+  </template>
+
+  <template id="tpl-messages">
+    <h2 id="stepTitle">Enable Messages in iCloud</h2>
+    <p class="why">This keeps your full iMessage history synced, including deletions and read status.</p>
+    <details open>
+      <summary>On your <strong>Mac</strong></summary>
+      <ol>
+        <li>Open <span class="kbd">Messages</span> → <span class="kbd">Settings…</span> → <span class="kbd">iMessage</span>.</li>
+        <li>Check <strong>Enable Messages in iCloud</strong> → click <strong>Sync Now</strong>.</li>
+      </ol>
+    </details>
+    <details>
+      <summary>On your <strong>iPhone/iPad</strong></summary>
+      <ol>
+        <li><span class="kbd">Settings → Messages</span>.</li>
+        <li>Turn on <strong>Messages in iCloud</strong>. Plug into power & Wi‑Fi if the sync is large.</li>
+      </ol>
+    </details>
+  </template>
+
+  <template id="tpl-contacts-default">
+    <h2 id="stepTitle">Make iCloud the default Contacts account</h2>
+    <p class="why">New contacts can land in the wrong place (e.g., “On My Mac” or Gmail) and won’t appear elsewhere.</p>
+    <div class="checklist">
+      <div class="item"><strong>iPhone/iPad:</strong> <span class="kbd">Settings → Contacts → Default Account</span> → choose <strong>iCloud</strong>.</div>
+      <div class="item"><strong>Mac:</strong> Open <span class="kbd">Contacts</span> → <span class="kbd">Settings…</span> → <span class="kbd">Accounts</span> → ensure <strong>iCloud</strong> is enabled. If you see a local group “On My Mac”, consider moving cards into iCloud for syncing.</div>
+    </div>
+  </template>
+
+  <template id="tpl-storage">
+    <h2 id="stepTitle">Check storage (iCloud & your Mac)</h2>
+    <p class="why">If either is full, syncing pauses.</p>
+    <div class="checklist">
+      <div class="item"><strong>iCloud storage:</strong> <span class="kbd">System Settings → [Your Name] → iCloud → Manage Storage</span>. Free up space or upgrade if needed.</div>
+      <div class="item"><strong>Mac disk space:</strong> <span class="kbd">System Settings → General → Storage</span>. Keep a few GB free.</div>
+    </div>
+  </template>
+
+  <template id="tpl-refresh">
+    <h2 id="stepTitle">Refresh the sync</h2>
+    <p class="why">Toggling a service off/on forces a clean resync.</p>
+    <div class="checklist">
+      <div class="item"><strong>Contacts:</strong> Turn <em>Contacts</em> off and back on in iCloud on each device. When prompted on iPhone, choose <em>Keep on My iPhone</em>, then turn back on.</div>
+      <div class="item"><strong>Messages:</strong> In <em>Messages</em> on Mac, click <strong>Sync Now</strong>. On iPhone, toggle <em>Messages in iCloud</em> off → on.</div>
+      <div class="item"><strong>Give it time:</strong> Large libraries may take a while. Keep the devices on Wi‑Fi; plug phones into power.</div>
+    </div>
+  </template>
+
+  <template id="tpl-update-restart">
+    <h2 id="stepTitle">Update & restart</h2>
+    <p class="why">Updates often include iCloud fixes, and restarts clear stalls.</p>
+    <div class="checklist">
+      <div class="item"><strong>Update:</strong> <span class="kbd">Mac → System Settings → General → Software Update</span> • <span class="kbd">iPhone → Settings → General → Software Update</span>.</div>
+      <div class="item"><strong>Restart both devices</strong> after updating.</div>
+    </div>
+  </template>
+
+  <template id="tpl-last-resort">
+    <h2 id="stepTitle">Last resort: sign out of iCloud, then back in</h2>
+    <p class="why"><span style="color: var(--warn)">Use only if the previous steps didn’t help.</span> This forces a full account resync.</p>
+    <div class="checklist">
+      <div class="item"><strong>Important:</strong> Before signing out, make sure your contacts and messages have uploaded to iCloud (check on <a href="https://www.icloud.com/" target="_blank" rel="noopener">iCloud.com</a> where possible).</div>
+      <div class="item"><strong>Mac:</strong> <span class="kbd">System Settings → [Your Name]</span> → <strong>Sign Out</strong>. Then sign back in and re-enable services.</div>
+      <div class="item"><strong>iPhone/iPad:</strong> <span class="kbd">Settings → [Your Name]</span> → scroll down → <strong>Sign Out</strong>. Sign back in and re-enable services.</div>
+    </div>
+    <p class="muted">If problems persist after this, contact Apple Support and mention exactly which services won’t sync and between which devices.</p>
+  </template>
+
+  <script>
+    const steps = [
+      { id: 'welcome', tpl: 'tpl-welcome' },
+      { id: 'appleid', tpl: 'tpl-appleid' },
+      { id: 'network-time', tpl: 'tpl-network-time' },
+      { id: 'status', tpl: 'tpl-status' },
+      { id: 'icloud-toggles', tpl: 'tpl-icloud-toggles' },
+      { id: 'messages', tpl: 'tpl-messages' },
+      { id: 'contacts-default', tpl: 'tpl-contacts-default' },
+      { id: 'storage', tpl: 'tpl-storage' },
+      { id: 'refresh', tpl: 'tpl-refresh' },
+      { id: 'update-restart', tpl: 'tpl-update-restart' },
+      { id: 'last-resort', tpl: 'tpl-last-resort' },
+    ];
+
+    const state = {
+      idx: 0,
+    };
+
+    const el = {
+      dots: document.getElementById('dots'),
+      progressText: document.getElementById('progressText'),
+      step: document.getElementById('step'),
+      nextBtn: document.getElementById('nextBtn'),
+      backBtn: document.getElementById('backBtn'),
+      restartBtn: document.getElementById('restartBtn'),
+      printBtn: document.getElementById('printBtn'),
+    };
+
+    function renderDots() {
+      el.dots.innerHTML = '';
+      steps.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i < state.idx ? ' done' : i === state.idx ? ' active' : '');
+        d.title = `Step ${i+1}`;
+        el.dots.appendChild(d);
+      });
+    }
+
+    function loadStep() {
+      const total = steps.length;
+      const s = steps[state.idx];
+      const tpl = document.getElementById(s.tpl);
+      el.step.innerHTML = '';
+      el.step.appendChild(tpl.content.cloneNode(true));
+
+      el.progressText.textContent = `Step ${state.idx + 1} of ${total}`;
+      renderDots();
+
+      el.backBtn.disabled = state.idx === 0;
+      el.nextBtn.textContent = state.idx === total - 1 ? 'Finish ✅' : 'Next ▶';
+
+      // Focus the step title for accessibility
+      const h2 = el.step.querySelector('#stepTitle');
+      if (h2) { h2.setAttribute('tabindex','-1'); h2.focus({ preventScroll: true }); h2.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    }
+
+    function next() { if (state.idx < steps.length - 1) { state.idx++; loadStep(); } else { finish(); } }
+    function back() { if (state.idx > 0) { state.idx--; loadStep(); } }
+
+    function restart() {
+      if (confirm('Restart the troubleshooting from the beginning?')) {
+        state.idx = 0; loadStep();
+      }
+    }
+
+    function finish() {
+      el.step.innerHTML = `
+        <h2 id="stepTitle">All done 🎉</h2>
+        <p class="why">If syncing still isn’t working, take a screenshot of this page and share it with support, or contact Apple Support directly with the steps you’ve already tried.</p>
+        <div class="checklist">
+          <div class="item"><strong>Tips</strong>
+            Keep devices on Wi‑Fi and power for large syncs. Give it some time—big message histories can take a while.
+          </div>
+        </div>`;
+      renderDots();
+      el.backBtn.disabled = false;
+      el.nextBtn.textContent = 'Start Over';
+      el.nextBtn.onclick = restart;
+    }
+
+    // Button wiring
+    el.nextBtn.addEventListener('click', next);
+    el.backBtn.addEventListener('click', back);
+    el.restartBtn.addEventListener('click', restart);
+    el.printBtn.addEventListener('click', () => window.print());
+
+    // Keyboard: Enter = Next, Alt+Left/Right = Back/Next
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); next(); }
+      if (e.altKey && e.key === 'ArrowRight') { next(); }
+      if (e.altKey && e.key === 'ArrowLeft') { back(); }
+    });
+
+    // Initial render
+    renderDots();
+    loadStep();
+  </script>
+</body>
+</html>
