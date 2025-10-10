@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
+<title>Trace — Single File</title>
+<style>
+  :root {
+    --bg:#fafafa; --ink:#2c7be5; --guide:#000; --guideA:.25; --ok:#2c7be533; --err:#ff336633;
+    --hud:#ffffffcc; --shadow:0 8px 28px #0002;
+  }
+  html,body { height:100%; margin:0; background:var(--bg); touch-action:none; -webkit-user-select:none; user-select:none; }
+  body { display:grid; grid-template-rows: 1fr auto; }
+  .stage { display:grid; place-items:center; }
+  svg { width:min(94vw, 900px); height:auto; overflow:visible; }
+
+  .guide { stroke: var(--guide); stroke-width:18; fill:none; stroke-linecap:round; opacity:var(--guideA); stroke-dasharray: 1 28; }
+  .dir { stroke: var(--ink); stroke-width:18; fill:none; stroke-linecap:round; opacity:.18; stroke-dasharray: 1 30; animation: flow 1.6s linear infinite; }
+  @keyframes flow { to { stroke-dashoffset:-64; } }
+  @media (prefers-reduced-motion: reduce) { .dir { animation:none; opacity:.1; } }
+
+  .progress { stroke: var(--ink); stroke-width:18; fill:none; stroke-linecap:round; stroke-dasharray: 0 1; }
+  .start-dot { fill: var(--ink); transform-origin:center; animation: breathe 1.4s ease-in-out infinite; }
+  @keyframes breathe { 0%{transform:scale(1)} 50%{transform:scale(1.06)} 100%{transform:scale(1)} }
+
+  .halo { fill:none; stroke-width:36; stroke: var(--ok); }
+  .halo.err { stroke: var(--err); }
+
+  .hud {
+    display:flex; gap:12px; align-items:center; justify-content:space-between;
+    padding:10px 12px; background:var(--hud); backdrop-filter: blur(8px);
+    box-shadow: var(--shadow); border-radius:14px; margin:12px; touch-action:manipulation;
+  }
+  .row { display:flex; gap:8px; align-items:center; }
+  button {
+    appearance:none; border:none; border-radius:12px; padding:10px 14px; font:600 16px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background:#fff; box-shadow: var(--shadow); cursor:pointer;
+  }
+  button:active { transform: translateY(1px); }
+  .pill { font:700 14px system-ui; padding:8px 12px; border-radius:999px; background:#fff; box-shadow: var(--shadow); }
+  .small { font:600 12px; opacity:.7 }
+  .star { font-size:18px; }
+  .muted { opacity:.55 }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <svg viewBox="0 0 800 800" id="board" aria-label="tracing-board">
+      <defs></defs>
+      <!-- dynamic content injected by JS -->
+    </svg>
+  </div>
+
+  <div class="hud" id="hud">
+    <div class="row">
+      <button id="prev" aria-label="previous">◀︎</button>
+      <div class="pill"><span id="label">Line</span> <span class="small muted" id="step">1/1</span></div>
+      <button id="next" aria-label="next">▶︎</button>
+    </div>
+    <div class="row">
+      <div class="pill"><span class="star" id="stars">☆ ☆ ☆</span></div>
+      <button id="retry" aria-label="retry">↺</button>
+      <button id="sound" aria-label="sound">🔊</button>
+    </div>
+  </div>
+
+<script>
+/* ----------------- CONTENT ----------------- */
+const SHAPES = [
+  // Stage 1: primitives
+  { id:'line_1', label:'Line', viewBox:'0 0 800 800',
+    strokes:[{path:'M 120 400 L 680 400', startOffset:0}], tolerancePx:18 },
+  { id:'curve_1', label:'Curve', viewBox:'0 0 800 800',
+    strokes:[{path:'M 120 560 Q 400 120 680 560', startOffset:0}], tolerancePx:20 },
+  { id:'zigzag_1', label:'Zigzag', viewBox:'0 0 800 800',
+    strokes:[{path:'M 120 560 L 320 240 L 520 560 L 680 320', startOffset:0}], tolerancePx:22 },
+  // Stage 2: composite example: arch "∩" (single stroke)
+  { id:'arch_1', label:'Arch', viewBox:'0 0 800 800',
+    strokes:[{path:'M 160 560 L 160 300 Q 400 120 640 300 L 640 560', startOffset:0}], tolerancePx:20 },
+  // Stage 3: letter with 2 strokes (A)
+  { id:'A_1', label:'A', viewBox:'0 0 800 800',
+    strokes:[
+      {path:'M 200 640 L 400 160 L 600 640', startOffset:0},
+      {path:'M 280 440 L 520 440', startOffset:0}
+    ], tolerancePx:20 },
+  // Stage 3: number "5" (two strokes)
+  { id:'num5', label:'5', viewBox:'0 0 800 800',
+    strokes:[
+      {path:'M 600 220 L 240 220 L 240 440', startOffset:0},
+      {path:'M 240 440 Q 240 640 440 640 Q 640 640 640 500', startOffset:0}
+    ], tolerancePx:22 },
+];
+
+/* ------------- RENDER + ENGINE ------------- */
+const svg = document.getElementById('board');
+const hud = {
+  prev: document.getElementById('prev'),
+  next: document.getElementById('next'),
+  retry: document.getElementById('retry'),
+  sound: document.getElementById('sound'),
+  label: document.getElementById('label'),
+  step: document.getElementById('step'),
+  stars: document.getElementById('stars'),
+};
+
+let state = {
+  i: 0,          // shape index
+  k: 0,          // stroke index within shape
+  progress: 0,   // 0..1
+  bestStars: {}, // id -> stars
+  soundOn: true,
+};
+
+const audio = (() => {
+  let ctx = null;
+  function ensure() { if (!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)(); return ctx; }
+  function beep(freq=660, dur=0.15, type='sine', gain=0.05) {
+    if (!state.soundOn) return;
+    const ac = ensure();
+    const t0 = ac.currentTime;
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = type; osc.frequency.setValueAtTime(freq, t0);
+    g.gain.setValueAtTime(gain, t0);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(g).connect(ac.destination);
+    osc.start(); osc.stop(t0 + dur + 0.02);
+  }
+  function chord() { beep(660, .12,'triangle',.06); setTimeout(()=>beep(880,.12,'triangle',.05), 60); }
+  return { beep, chord };
+})();
+
+/* ---------- Utils: geometry + input -------- */
+function createSVG(tag, attrs={}) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+function toPoint(e) {
+  const pt = svg.createSVGPoint();
+  const t = (e.touches && e.touches[0]) || e;
+  pt.x = t.clientX; pt.y = t.clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+
+// Precompute sampling table for an SVG path for cheap projection
+function samplePath(pathEl, step=6) {
+  const L = pathEl.getTotalLength();
+  const N = Math.max(2, Math.ceil(L/step));
+  const samples = new Array(N);
+  for (let i=0;i<N;i++){
+    const s = (i/(N-1))*L;
+    const p = pathEl.getPointAtLength(s);
+    samples[i] = {x:p.x, y:p.y, s};
+  }
+  return { L, samples };
+}
+function nearestOnSamples(samples, p, startIndex=0) {
+  // local search around last index for speed
+  const N = samples.length;
+  let best = {i:startIndex, d:Infinity};
+  // search window ~40 samples either side
+  const lo = Math.max(0, startIndex - 40);
+  const hi = Math.min(N-1, startIndex + 40);
+  for (let i=lo;i<=hi;i++){
+    const dx = p.x - samples[i].x, dy = p.y - samples[i].y;
+    const d = dx*dx + dy*dy;
+    if (d < best.d) best = {i, d};
+  }
+  return best.i;
+}
+
+/* ------------- Exercise lifecycle ---------- */
+let els = {}; // active SVG elements for current stroke
+let tbl = null; // sampling table {L, samples}
+let lastIdx = 0; // last nearest sample index
+let tracing = false;
+let sPrev = 0;
+
+function renderStroke(sh, stroke) {
+  svg.setAttribute('viewBox', sh.viewBox);
+  svg.innerHTML = ''; // reset
+
+  const guide = createSVG('path', { d: stroke.path, class:'guide' });
+  const dir = createSVG('path', { d: stroke.path, class:'dir' });
+  const progress = createSVG('path', { d: stroke.path, class:'progress', 'stroke-dasharray': '0 1' });
+  const halo = createSVG('circle', { cx:-1000, cy:-1000, r:1, class:'halo' });
+
+  svg.appendChild(guide);
+  svg.appendChild(dir);
+  svg.appendChild(progress);
+  svg.appendChild(halo);
+
+  // Start dot at startOffset
+  const temp = createSVG('path', { d: stroke.path });
+  const L = temp.getTotalLength();
+  const s0 = Math.max(0, Math.min(1, stroke.startOffset||0)) * L;
+  const p0 = temp.getPointAtLength(s0);
+  const startDot = createSVG('circle', { cx:p0.x, cy:p0.y, r:18, class:'start-dot', id:'start' });
+  svg.appendChild(startDot);
+
+  tbl = samplePath(temp, 6);
+  lastIdx = 0;
+  tracing = false;
+  sPrev = 0;
+  setProgress(0);
+
+  els = { guide, dir, progress, halo, startDot, temp };
+  updateHUD();
+  ghostDemoOnce();
+}
+
+function setProgress(t) {
+  const len = tbl.L * Math.max(0, Math.min(1, t));
+  els.progress.setAttribute('stroke-dasharray', `${len} ${tbl.L - len + 1}`);
+}
+
+function setHalo(p, ok=true) {
+  const tol = getTolerance();
+  els.halo.setAttribute('cx', p.x);
+  els.halo.setAttribute('cy', p.y);
+  els.halo.setAttribute('r', Math.max(24, tol*1.2));
+  els.halo.setAttribute('class', `halo ${ok?'':'err'}`);
+}
+
+function insideStart(p) {
+  const s0 = (state.k===0? 0 : 0); // using startOffset=0 for samples here
+  const p0 = els.temp.getPointAtLength(s0);
+  return Math.hypot(p.x - p0.x, p.y - p0.y) <= 28;
+}
+
+function getTolerance() {
+  const vb = svg.viewBox.baseVal;
+  const scaleRef = Math.min(vb.width, vb.height);
+  const dyn = Math.max(10, 0.06 * (Math.min(window.innerWidth, window.innerHeight)));
+  const clamp = (x,min,max)=>Math.max(min,Math.min(max,x));
+  const shapeTol = SHAPES[state.i].tolerancePx ?? 20;
+  return clamp(Math.max(dyn, shapeTol), 10, 28);
+}
+
+function completeStroke() {
+  setProgress(1);
+  els.dir.style.opacity = 0.08;
+  if (navigator.vibrate) navigator.vibrate(15);
+  audio.chord();
+  // stars: simplistic eval (100% fill counts as 3)
+  const key = SHAPES[state.i].id;
+  state.bestStars[key] = Math.max(state.bestStars[key]||0, 3);
+  updateHUD();
+  // advance to next stroke or next shape
+  setTimeout(() => {
+    const sh = SHAPES[state.i];
+    if (state.k < sh.strokes.length - 1) {
+      state.k++;
+      renderStroke(sh, sh.strokes[state.k]);
+    } else {
+      // move to next shape
+      if (state.i < SHAPES.length - 1) { state.i++; state.k=0; renderStroke(SHAPES[state.i], SHAPES[state.i].strokes[0]); }
+      els.dir.style.opacity = .18;
+    }
+  }, 600);
+}
+
+function updateHUD() {
+  const sh = SHAPES[state.i];
+  hud.label.textContent = sh.label;
+  hud.step.textContent = `${state.k+1}/${sh.strokes.length}`;
+  const s = state.bestStars[sh.id] || 0;
+  hud.stars.textContent = ['☆ ☆ ☆','★ ☆ ☆','★ ★ ☆','★ ★ ★'][s];
+  hud.sound.textContent = state.soundOn ? '🔊' : '🔈';
+}
+
+/* ------------- Input handling -------------- */
+function onDown(e) {
+  const p = toPoint(e);
+  if (!tracing && !insideStart(p)) return;
+  tracing = true;
+  sPrev = 0;
+  els.startDot.style.opacity = .3;
+  setHalo(p, true);
+  e.preventDefault();
+}
+function onMove(e) {
+  if (!tracing) return;
+  const p = toPoint(e);
+  const tol = getTolerance();
+  // nearest sample near lastIdx
+  const idx = nearestOnSamples(tbl.samples, p, lastIdx);
+  lastIdx = idx;
+  const nearest = tbl.samples[idx];
+  const d = Math.hypot(p.x - nearest.x, p.y - nearest.y);
+  setHalo(p, d <= tol);
+
+  const backTolPx = 8;
+  if (nearest.s + backTolPx < sPrev) return; // ignore big backward scrubs
+
+  if (d <= tol) {
+    sPrev = Math.max(sPrev, nearest.s);
+    setProgress(sPrev / tbl.L);
+    if (sPrev >= tbl.L - 2) completeStroke();
+  }
+  e.preventDefault();
+}
+function onUp() {
+  tracing = false;
+  els.startDot.style.opacity = 1;
+  els.halo.setAttribute('cx', -1000);
+}
+
+/* ---------- Ghost demo (first load) -------- */
+let demoShown = false;
+function ghostDemoOnce() {
+  if (demoShown) return;
+  demoShown = true;
+  // animate along ~30% then fade
+  const ghost = createSVG('circle', { r:16, fill:'#00000022' });
+  svg.appendChild(ghost);
+  const L = tbl.L;
+  const dur = 900;
+  const sEnd = 0.3*L;
+  const t0 = performance.now();
+  (function tick(t){
+    const k = Math.min(1, (t - t0)/dur);
+    const s = k*sEnd;
+    const p = els.temp.getPointAtLength(s);
+    ghost.setAttribute('cx', p.x); ghost.setAttribute('cy', p.y);
+    ghost.setAttribute('opacity', 1 - k*0.8);
+    if (k<1) requestAnimationFrame(tick); else ghost.remove();
+  })(t0);
+}
+
+/* ----------------- Wiring ------------------ */
+svg.addEventListener('touchstart', onDown, {passive:false});
+svg.addEventListener('mousedown', onDown);
+svg.addEventListener('touchmove', onMove, {passive:false});
+svg.addEventListener('mousemove', onMove);
+window.addEventListener('touchend', onUp);
+window.addEventListener('mouseup', onUp);
+
+hud.prev.addEventListener('click', () => {
+  state.i = Math.max(0, state.i-1); state.k=0; renderStroke(SHAPES[state.i], SHAPES[state.i].strokes[0]);
+});
+hud.next.addEventListener('click', () => {
+  state.i = Math.min(SHAPES.length-1, state.i+1); state.k=0; renderStroke(SHAPES[state.i], SHAPES[state.i].strokes[0]);
+});
+hud.retry.addEventListener('click', () => {
+  const sh = SHAPES[state.i]; renderStroke(sh, sh.strokes[state.k]);
+});
+hud.sound.addEventListener('click', () => { state.soundOn = !state.soundOn; updateHUD(); audio.beep(300,.06); });
+
+/* ----------------- Start ------------------- */
+(function init(){
+  const i = 0;
+  state.i = i; state.k = 0;
+  renderStroke(SHAPES[i], SHAPES[i].strokes[0]);
+})();
+</script>
+</body>
+</html>
