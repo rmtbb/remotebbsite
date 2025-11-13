@@ -279,6 +279,7 @@
       gap: 10px;
     }
 
+    /* --- CHANGE 1: animated show/hide for side-cards --- */
     .side-card {
       background: radial-gradient(circle at top, #20264a, #090a14 65%);
       border-radius: var(--radius-xl);
@@ -286,7 +287,20 @@
       padding: 14px 14px 12px;
       position: relative;
       overflow: hidden;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition:
+        opacity var(--transition-fast),
+        transform var(--transition-fast);
     }
+
+    .side-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    /* --- END CHANGE 1 --- */
 
     .side-card::before {
       content: "";
@@ -526,47 +540,45 @@
             </p>
           </article>
 
-<!-- Step 5: Turn Structure -->
-<article class="step" data-step="5">
-  <h2>🔄 Turn Structure</h2>
+          <!-- Step 5: Turn Structure -->
+          <article class="step" data-step="5">
+            <h2>🔄 Turn Structure</h2>
 
-    <p>At the beginning of each turn:</p>
+            <p>At the beginning of each turn:</p>
 
+            <ul>
+              <li><strong>Reset</strong> – Turn all your tapped cards upright.</li>
+              <li><strong>Draw</strong> – Draw one card.</li>
+            </ul>
+            <p>Every turn has three phases:</p>
 
-  <ul>
-    <li><strong>Reset</strong> – Turn all your tapped cards upright.</li>
-    <li><strong>Draw</strong> – Draw one card.</li>
-  </ul>
-  <p>Every turn has three phases:</p>
+            <ol>
+              <li><strong>Main Phase</strong>
+                <ul>
+                  <li>You may play <strong>one Gem</strong> per turn.</li>
+                  <li>You may spend Gems to play <strong>Creatures</strong>.</li>
+                  <li>You may use abilities that are allowed during Main Phases.</li>
+                </ul>
+              </li>
 
-  <ol>
-    <li><strong>Main Phase</strong>
-      <ul>
-        <li>You may play <strong>one Gem</strong> per turn.</li>
-        <li>You may spend Gems to play <strong>Creatures</strong>.</li>
-        <li>You may use abilities that are allowed during Main Phases.</li>
-      </ul>
-    </li>
+              <li><strong>Combat Phase</strong>
+                <ul>
+                  <li>Choose your attacking creatures.</li>
+                  <li>Your opponent chooses blockers.</li>
+                </ul>
+              </li>
 
-    <li><strong>Combat Phase</strong>
-      <ul>
-        <li>Choose your attacking creatures.</li>
-        <li>Your opponent chooses blockers.</li>
-      </ul>
-    </li>
+              <li><strong>Second Main Phase</strong>
+                <ul>
+                  <li>You may play more cards or use abilities.</li>
+                </ul>
+              </li>
+            </ol>
 
-    <li><strong>Second Main Phase</strong>
-      <ul>
-        <li>You may play more cards or use abilities.</li>
-      </ul>
-    </li>
-  </ol>
+            <ul>
+              <li><strong>Pass</strong> – End your turn.</li>
+            </ul>
 
-  <ul>
-    <li><strong>Pass</strong> – End your turn.</li>
-  </ul>
-
-</article>
             <div class="note">
               <strong>“Tap”</strong> means turning a card sideways to show it’s been used this turn.<br />
               <strong>“Untap”</strong> means turning it upright again at the start of your next turn.
@@ -827,7 +839,10 @@
 
       <!-- SIDE PANEL -->
       <aside class="side-panel">
-        <div class="side-card">
+        <!-- CHANGE 2: add data-show-from / data-show-to to control when these appear -->
+
+        <!-- Show from step 1 onward -->
+        <div class="side-card visible" data-show-from="4">
           <div class="side-card-inner">
             <div class="side-title">Quick Start</div>
             <div class="side-body">
@@ -847,7 +862,8 @@
           </div>
         </div>
 
-        <div class="side-card">
+        <!-- Cards overview becomes relevant around step 3 -->
+        <div class="side-card" data-show-from="3">
           <div class="side-card-inner">
             <div class="side-title">Card Roles</div>
             <div class="side-body">
@@ -864,7 +880,8 @@
           </div>
         </div>
 
-        <div class="side-card">
+        <!-- Gem sacrifices become relevant at step 6 -->
+        <div class="side-card" data-show-from="6">
           <div class="side-card-inner">
             <div class="side-title">Gem Sacrifices</div>
             <div class="side-body">
@@ -886,7 +903,8 @@
           </div>
         </div>
 
-        <div class="side-card">
+        <!-- Straight combos match steps 8–9+ -->
+        <div class="side-card" data-show-from="8">
           <div class="side-card-inner">
             <div class="side-title">Straight Combos</div>
             <div class="side-body">
@@ -902,6 +920,27 @@
             </div>
           </div>
         </div>
+
+        <!-- Creature stats fit when you start summoning around step 7 -->
+        <div class="side-card" data-show-from="7">
+          <div class="side-card-inner">
+            <div class="side-title">Creature Costs &amp; Stats</div>
+            <div class="side-body">
+              <ul style="margin-left:16px; margin-top:4px;">
+                <li><strong>Jack</strong> → Cost <strong>2</strong>, <strong>1/1</strong></li>
+                <li><strong>Queen</strong> → Cost <strong>4</strong>, <strong>2/2</strong></li>
+                <li><strong>King</strong> → Cost <strong>5</strong>, <strong>3/3</strong></li>
+                <li><strong>Ace</strong> → Cost <strong>3</strong>, <strong>1/1</strong> <em>(can attack right away)</em></li>
+              </ul>
+              <p style="margin-top:6px; font-size:0.86rem; color:var(--text-muted);">
+                Remember: pay with Gems that match the creature’s color when you cast them.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- END CHANGE 2 -->
+
       </aside>
     </main>
   </div>
@@ -913,6 +952,7 @@
       const nextBtn = document.getElementById("nextBtn");
       const stepCounter = document.getElementById("stepCounter");
       const dotsContainer = document.getElementById("dots");
+      const sideCards = Array.from(document.querySelectorAll(".side-card")); // CHANGE 3a
       let currentIndex = 0;
 
       function updateDots() {
@@ -925,6 +965,20 @@
         });
       }
 
+      // CHANGE 3b: helper to show/hide side-cards based on current step
+      function updateSideCards(stepNumber) {
+        sideCards.forEach((card) => {
+          const fromAttr = card.getAttribute("data-show-from");
+          const toAttr = card.getAttribute("data-show-to");
+          const from = fromAttr ? parseInt(fromAttr, 10) : 1;
+          const to = toAttr ? parseInt(toAttr, 10) : steps.length;
+
+          const shouldShow = stepNumber >= from && stepNumber <= to;
+          card.classList.toggle("visible", shouldShow);
+        });
+      }
+      // END CHANGE 3b
+
       function updateUI() {
         steps.forEach((step, idx) => {
           step.classList.toggle("active", idx === currentIndex);
@@ -933,8 +987,12 @@
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex === steps.length - 1;
 
-        stepCounter.textContent = `Step ${currentIndex + 1} of ${steps.length}`;
+        const stepNumber = currentIndex + 1;
+        stepCounter.textContent = `Step ${stepNumber} of ${steps.length}`;
         updateDots();
+
+        // CHANGE 3c: keep side-cards in sync with current step
+        updateSideCards(stepNumber);
       }
 
       function goToStep(idx) {
