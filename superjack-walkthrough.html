@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Superjack — Easy How-To Play Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050712;
+      --bg-card: #111426;
+      --bg-card-soft: #181b30;
+      --accent-red: #ff4b6a;
+      --accent-gold: #ffdd7b;
+      --accent-blue: #4ac6ff;
+      --text-main: #f7f7ff;
+      --text-muted: #a2a6d0;
+      --border-soft: rgba(255, 255, 255, 0.08);
+      --radius-xl: 18px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.6);
+      --transition-fast: 0.25s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at top, #1a2444 0, transparent 55%),
+        radial-gradient(circle at bottom, #320b3b 0, transparent 55%),
+        var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 960px;
+      background: radial-gradient(circle at top left, #1e223d, #090a14 55%);
+      border-radius: 24px;
+      padding: 20px 20px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      backdrop-filter: blur(18px);
+    }
+
+    @media (min-width: 768px) {
+      .app-shell {
+        padding: 24px 26px 20px;
+      }
+    }
+
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 25% 15%, #ffffff, #ff4b6a 40%, #1b1338 85%);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 18px rgba(255, 75, 106, 0.7);
+    }
+
+    .brand-text-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-text-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--accent-gold);
+      background: radial-gradient(circle at top, rgba(255, 221, 123, 0.16), transparent 65%);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .pill span.key {
+      padding: 1px 5px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .content-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 768px) {
+      .content-shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .step-panel {
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-card-soft));
+      border-radius: var(--radius-xl);
+      padding: 18px 18px 16px;
+      border: 1px solid var(--border-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .step-panel {
+        padding: 20px 22px 18px;
+      }
+    }
+
+    .step-panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at top left, rgba(255, 221, 123, 0.12), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(74, 198, 255, 0.18), transparent 60%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .step-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .step {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 10px;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 1.7rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    .tagline {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    p {
+      margin: 6px 0 10px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #e0e4ff;
+    }
+
+    ul, ol {
+      margin: 6px 0 10px 18px;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 4px;
+      font-size: 0.94rem;
+      color: #dde0ff;
+    }
+
+    .hint {
+      font-size: 0.88rem;
+      color: var(--accent-blue);
+      border-left: 2px solid rgba(74, 198, 255, 0.7);
+      padding-left: 10px;
+      margin-top: 8px;
+    }
+
+    .note {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-left: 2px dashed rgba(255, 255, 255, 0.2);
+      padding-left: 10px;
+      margin-top: 8px;
+    }
+
+    .columns-2 {
+      display: grid;
+      gap: 10px 20px;
+    }
+
+    @media (min-width: 640px) {
+      .columns-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .stat-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 4px;
+      font-size: 0.82rem;
+    }
+
+    .stat-pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.3));
+    }
+
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .side-card {
+      background: radial-gradient(circle at top, #20264a, #090a14 65%);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .side-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at top left, rgba(255, 75, 106, 0.18), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(255, 221, 123, 0.1), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .side-card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .side-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      color: var(--accent-gold);
+    }
+
+    .side-body {
+      font-size: 0.9rem;
+      color: #e2e5ff;
+    }
+
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 16px;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+    }
+
+    .step-counter {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dots {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      cursor: pointer;
+      transition: transform var(--transition-fast), background var(--transition-fast);
+    }
+
+    .dot.active {
+      width: 18px;
+      background: linear-gradient(90deg, var(--accent-red), var(--accent-gold));
+      transform: translateY(-1px);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 7px 13px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 60%);
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition-fast), transform var(--transition-fast),
+        border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .btn-primary {
+      border-color: rgba(255, 221, 123, 0.65);
+      background: linear-gradient(135deg, #ffb65b, #ff4b6a);
+      color: #1a0b16;
+      box-shadow: 0 0 22px rgba(255, 134, 82, 0.6);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .btn-key-hint {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    .keyboard-hint {
+      text-align: right;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: -4px;
+    }
+
+    .keyboard-hint span {
+      border-radius: 6px;
+      padding: 2px 5px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-left: 4px;
+      font-size: 0.72rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="header">
+      <div class="brand">
+        <div class="logo-circle">STG</div>
+        <div>
+          <div class="brand-text-title">
+            ♠️♥️ SUPERJACK: THE GAME <span style="opacity:0.55;"></span> ♣️♦️
+          </div>
+          <div class="brand-text-sub">
+            EASY HOW-TO PLAY GUIDE
+          </div>
+        </div>
+      </div>
+      <div class="pill">
+        <span>Learn as you play</span>
+        <span class="key">←</span>
+        <span class="key">→</span>
+      </div>
+    </header>
+
+    <main class="content-shell">
+      <!-- MAIN STEP PANEL -->
+      <section class="step-panel">
+        <div class="step-inner">
+          <!-- Step 1 -->
+          <article class="step active" data-step="1">
+            <h1>Welcome to Superjack</h1>
+            <p class="tagline">
+              A fast way to learn the rules while you play. You don’t need a special deck — just a normal set of playing cards.
+            </p>
+            <p>
+              In Superjack, you’re a commander leading a magical kingdom into battle. Gems power your spells and creatures, and you’ll sling attacks back and forth until someone drops to <strong>0 health</strong>.
+            </p>
+            <p>
+              This guide walks you through the rules <strong>one step at a time</strong>. Use the buttons — or your <strong>left/right arrow keys</strong> — to advance.
+            </p>
+            <div class="hint">
+              You can set this up at any table with a regular 52-card deck. No special tokens needed — you can track health with dice, coins, or a notes app.
+            </div>
+          </article>
+
+          <!-- Step 2: Goal -->
+          <article class="step" data-step="2">
+            <h2>🎯 Goal of the Game</h2>
+            <p>
+              Superjack is a duel between two (or more) players. You’ll use your cards to summon creatures, attack, and cast magic.
+            </p>
+            <ul>
+              <li>Each player starts with <strong>20 health</strong>.</li>
+              <li>Use your cards to <strong>summon creatures, attack, and cast magic</strong>.</li>
+              <li>The first player to bring their opponent down to <strong>0 health</strong> wins.</li>
+            </ul>
+            <p>
+              Everything else in the rules is just clever ways to get your opponent to 0 before they get you.
+            </p>
+          </article>
+
+          <!-- Step 3: Cards -->
+          <article class="step" data-step="3">
+            <h2>🃏 The Cards</h2>
+            <p>You use a regular deck of playing cards.</p>
+
+            <div class="columns-2">
+              <div>
+                <h3>💎 Gems = Energy (2–7)</h3>
+                <ul>
+                  <li>Number cards <strong>2–7</strong> are called <strong>Gems</strong>.</li>
+                  <li>They’re your <strong>energy sources</strong> — like fuel for your magic.</li>
+                  <li>You play them to the table to pay for creatures and abilities.</li>
+                  <li>Each Gem has a color:
+                    <ul>
+                      <li><strong>Red</strong> = ♥ and ♦</li>
+                      <li><strong>Black</strong> = ♠ and ♣</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3>🧙 Creatures = Face Cards &amp; Aces</h3>
+                <ul>
+                  <li><strong>Jacks, Queens, Kings, and Aces</strong> are your <strong>creatures</strong>.</li>
+                  <li>These are your fighters — they attack, block, and carry buffs.</li>
+                  <li><strong>Red creatures</strong> must be paid for with <strong>red gems</strong>.</li>
+                  <li><strong>Black creatures</strong> must be paid for with <strong>black gems</strong>.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="hint">
+              When you <strong>summon a creature</strong>, every Gem you use to pay for it must match its color. Later, you can still attach buffs or equipment of any color.
+            </div>
+          </article>
+
+          <!-- Step 4: Setup -->
+          <article class="step" data-step="4">
+            <h2>⚙️ Setup</h2>
+            <p>Getting started only takes a minute.</p>
+            <ol>
+              <li>Each player starts at <strong>20 health</strong>.</li>
+              <li>Shuffle your deck thoroughly.</li>
+              <li>Each player draws <strong>5 cards</strong>.</li>
+              <li>Play <strong>Rock–Paper–Scissors</strong> to see who goes first.</li>
+            </ol>
+            <p>
+              That’s it — you’re ready for your first battle.
+            </p>
+          </article>
+
+<!-- Step 5: Turn Structure -->
+<article class="step" data-step="5">
+  <h2>🔄 Turn Structure</h2>
+
+    <p>At the beginning of each turn:</p>
+
+
+  <ul>
+    <li><strong>Reset</strong> – Turn all your tapped cards upright.</li>
+    <li><strong>Draw</strong> – Draw one card.</li>
+  </ul>
+  <p>Every turn has three phases:</p>
+
+  <ol>
+    <li><strong>Main Phase</strong>
+      <ul>
+        <li>You may play <strong>one Gem</strong> per turn.</li>
+        <li>You may spend Gems to play <strong>Creatures</strong>.</li>
+        <li>You may use abilities that are allowed during Main Phases.</li>
+      </ul>
+    </li>
+
+    <li><strong>Combat Phase</strong>
+      <ul>
+        <li>Choose your attacking creatures.</li>
+        <li>Your opponent chooses blockers.</li>
+      </ul>
+    </li>
+
+    <li><strong>Second Main Phase</strong>
+      <ul>
+        <li>You may play more cards or use abilities.</li>
+      </ul>
+    </li>
+  </ol>
+
+  <ul>
+    <li><strong>Pass</strong> – End your turn.</li>
+  </ul>
+
+</article>
+            <div class="note">
+              <strong>“Tap”</strong> means turning a card sideways to show it’s been used this turn.<br />
+              <strong>“Untap”</strong> means turning it upright again at the start of your next turn.
+            </div>
+          </article>
+
+          <!-- Step 6: Using Gems -->
+          <article class="step" data-step="6">
+            <h2>💎 Using Gems</h2>
+            <p>Gems are your energy source and mini spells.</p>
+            <ul>
+              <li>Each Gem card (2–7) gives <strong>1 energy</strong> of its color when tapped.</li>
+              <li>You <strong>tap gems</strong> to pay for creatures and some abilities.</li>
+              <li>Tapped gems stay sideways until the start of your next turn.</li>
+            </ul>
+
+            <h3>Gem Sacrifices (Extra Powers)</h3>
+            <p>
+              Instead of just tapping a gem, you can <strong>tap and sacrifice</strong> (discard) it for a one-time effect:
+            </p>
+            <ol>
+              <li><strong>2 or 3 → Fireball</strong>
+                <ul>
+                  <li>Deal <strong>2 damage</strong> to any creature <em>or</em> <strong>1 damage</strong> to a player.</li>
+                </ul>
+              </li>
+              <li><strong>4 or 5 → Mine</strong>
+                <ul>
+                  <li>Generate <strong>3 bonus energy</strong> of that gem’s color (for this turn only).</li>
+                </ul>
+              </li>
+              <li><strong>6 or 7 → Draw</strong>
+                <ul>
+                  <li>Draw <strong>1 card</strong>.</li>
+                </ul>
+              </li>
+            </ol>
+
+            <div class="note">
+              When you sacrifice a gem, it goes to your discard pile, also called your <strong>graveyard</strong>.
+            </div>
+          </article>
+
+          <!-- Step 7: Summoning Creatures -->
+          <article class="step" data-step="7">
+            <h2>⚔️ Summoning Creatures</h2>
+            <p>Creatures cost energy and have attack/health stats.</p>
+            <ul>
+              <li><strong>Jack</strong> costs <strong>2</strong> and has <strong>1 attack / 1 health</strong>.</li>
+              <li><strong>Queen</strong> costs <strong>4</strong> and has <strong>2 attack / 2 health</strong>.</li>
+              <li><strong>King</strong> costs <strong>5</strong> and has <strong>3 attack / 3 health</strong>.</li>
+              <li><strong>Ace</strong> costs <strong>3</strong> and has <strong>1 attack / 1 health</strong> but can attack right away.</li>
+            </ul>
+
+            <p>To play a creature:</p>
+            <ol>
+              <li>Tap enough gems of <strong>the same color</strong> to match its cost.</li>
+              <li>Place the creature on the table.</li>
+              <li>Unless stated otherwise, it <strong>can’t attack</strong> the turn it comes out (it’s “untrained”).</li>
+            </ol>
+
+            <div class="hint">
+              Remember: when summoning, <strong>all gems used must match the creature’s color</strong>. A red Queen needs red gems only; a black Jack needs black gems only.
+            </div>
+          </article>
+
+          <!-- Step 8: Royal Charge -->
+          <article class="step" data-step="8">
+            <h2>⚡ Royal Charge</h2>
+            <p>
+              Sometimes, paying for a creature in style makes it charge into battle immediately.
+            </p>
+            <p>
+              If the gems you tapped to play a creature are <strong>consecutive numbers of the same color</strong><br />
+              (like red 4–5 or black 5–6–7), that creature gains <strong>Royal Charge</strong>:
+            </p>
+            <ul>
+              <li>It can <strong>attack immediately</strong> this turn.</li>
+              <li>It can <strong>only be blocked</strong> by a creature of the <strong>same rank</strong> (J vs J, Q vs Q, etc.).</li>
+            </ul>
+            <p>
+              Pay in a straight, get a turbo-charged entrance.
+            </p>
+          </article>
+
+          <!-- Step 9: Straights -->
+          <article class="step" data-step="9">
+            <h2>🔷 Straights (Magic Combos)</h2>
+            <p>
+              If you have a <strong>straight of same-colored gems</strong> in play, you can tap them together for special magic effects.
+            </p>
+            <ul>
+              <li><strong>3-card straight</strong> → Gain <strong>+1 life</strong>.</li>
+              <li><strong>4-card straight</strong> → Draw 1 card, then discard 1 card.</li>
+              <li><strong>5-card straight</strong> → Return a creature from your graveyard to play, then sacrifice one gem from that straight.</li>
+              <li><strong>6-card straight</strong> → Take control of an opponent’s creature, then sacrifice one gem from that straight.</li>
+            </ul>
+
+            <div class="note">
+              All gems in a straight must be the <strong>same color</strong>.<br />
+              Straights are optional powers — activate them when the timing feels right.
+            </div>
+          </article>
+
+          <!-- Step 10: Pairs -->
+          <article class="step" data-step="10">
+            <h2>💠 Pairs (Buffs &amp; Equipment)</h2>
+            <p>
+              Pairs turn your creatures into armed war machines.
+            </p>
+            <p>
+              A <strong>pair</strong> is two gems of the <strong>same rank and same color</strong>.
+            </p>
+            <ul>
+              <li>You can <strong>attach</strong> (or “equip”) any pair to <strong>any creature</strong>, even one of a different color.</li>
+              <li>Each pair gives that creature <strong>+1 attack and +1 health</strong> until your next turn.</li>
+              <li>Each creature can hold up to <strong>two pairs</strong> at a time.</li>
+              <li>At the start of your next turn, all pairs <strong>fall off and untap</strong>.</li>
+              <li>A <strong>four of a kind</strong> (same rank across both colors) gives <strong>+3/+3</strong> if all four are attached to a creature.</li>
+            </ul>
+
+            <div class="hint">
+              Equipment doesn’t care about color matching — you can suit up a red creature with black gem pairs and vice versa.
+            </div>
+          </article>
+
+          <!-- Step 11: Combat -->
+          <article class="step" data-step="11">
+            <h2>🧱 Combat</h2>
+            <p>Combat follows a clear, fair sequence:</p>
+            <ol>
+              <li><strong>You declare attackers.</strong>
+                <ul>
+                  <li>Tap the creatures you’re using to attack.</li>
+                </ul>
+              </li>
+              <li><strong>Opponent declares blockers.</strong>
+                <ul>
+                  <li>They choose any untapped creatures to block.</li>
+                </ul>
+              </li>
+              <li><strong>You declare buffs.</strong>
+                <ul>
+                  <li>You can attach pairs or use gem effects.</li>
+                </ul>
+              </li>
+              <li><strong>Opponent declares buffs.</strong>
+                <ul>
+                  <li>They can do the same.</li>
+                </ul>
+              </li>
+              <li><strong>Damage happens.</strong>
+                <ul>
+                  <li>Attacker and blocker deal damage to each other.</li>
+                  <li>If a creature takes damage equal to or greater than its health, it dies.</li>
+                  <li>If an attacker isn’t blocked, it deals its damage to the opponent’s health directly.</li>
+                </ul>
+              </li>
+              <li><strong>End of turn.</strong>
+                <ul>
+                  <li>Surviving creatures heal back to full health.</li>
+                  <li>All tapped cards stay sideways until your next turn.</li>
+                </ul>
+              </li>
+            </ol>
+          </article>
+
+          <!-- Step 12: Special Moves -->
+          <article class="step" data-step="12">
+            <h2>👑 Special Moves</h2>
+
+            <h3>Jack Stacking</h3>
+            <ul>
+              <li>Jacks can <strong>stack</strong> on top of each other to combine power.</li>
+              <li>2 Jacks → <strong>2/2</strong></li>
+              <li>3 Jacks → <strong>4/4</strong></li>
+              <li>4 Jacks → <strong>8/8</strong> (a <strong>Superjack</strong>)</li>
+            </ul>
+            <p>
+              A <strong>Superjack</strong> has <strong>Trample</strong>, meaning extra damage carries over to the player if the blocker dies.
+            </p>
+
+            <h3>Royal Sacrifice</h3>
+            <ul>
+              <li>If you control a <strong>Jack, Queen, and King</strong> of the same color:
+                <ol>
+                  <li>Tap all three.</li>
+                  <li>Sacrifice the Jack.</li>
+                  <li>Destroy any target creature.</li>
+                </ol>
+              </li>
+            </ul>
+
+            <h3>Ace Magic</h3>
+            <ul>
+              <li>An <strong>Ace</strong> can be played <strong>anytime</strong>, even during your opponent’s turn.</li>
+              <li>It can be used three different ways:
+                <ol>
+                  <li><strong>As a creature</strong> – a 1/1 that can attack right away.</li>
+                  <li><strong>As a spell</strong> – destroys one enemy gem.</li>
+                  <li><strong>As a counter</strong> – cancel another Ace that was just played.</li>
+                </ol>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Step 13: Winning -->
+          <article class="step" data-step="13">
+            <h2>🧮 Winning</h2>
+            <ul>
+              <li>Keep attacking and casting until your opponent’s health reaches <strong>0</strong>.</li>
+              <li>When that happens — <strong>you win!</strong></li>
+              <li>If a player runs out of cards to draw, they just <strong>skip their draw step</strong> and keep playing.</li>
+            </ul>
+            <p>
+              There are no “deck out” losses here — the battle only ends when a commander falls.
+            </p>
+          </article>
+
+          <!-- Step 14: Quick Reminders -->
+          <article class="step" data-step="14">
+            <h2>❤️ Quick Reminders</h2>
+            <ul>
+              <li>Play <strong>one gem per turn.</strong></li>
+              <li>Gems must <strong>match the color</strong> of the creature you summon.</li>
+              <li>You can attach <strong>pairs of any color</strong> to any creature.</li>
+              <li>Straights, pairs, and sacrifices are <strong>all same-color combos</strong> when formed.</li>
+              <li>Jacks can stack to form <strong>Superjacks</strong>.</li>
+              <li>Use <strong>Royal Charge</strong> when you cast with a straight — attack right away!</li>
+              <li><strong>Royal Sacrifice</strong> (J+Q+K same color) destroys a creature.</li>
+              <li><strong>Ace</strong> = fast, flexible magic — attack, destroy, or counter.</li>
+            </ul>
+
+            <div class="hint">
+              You’re ready to play! Shuffle a deck, deal 5 cards each, and try a practice game. Keep this page open as your quick-reference guide.
+            </div>
+          </article>
+
+          <!-- Controls -->
+          <div class="controls">
+            <button class="btn" id="prevBtn">
+              ← Previous
+            </button>
+            <button class="btn btn-primary" id="nextBtn">
+              Next →
+            </button>
+          </div>
+
+          <div class="step-indicator">
+            <div class="step-counter" id="stepCounter">Step 1 of 14</div>
+            <div class="dots" id="dots"></div>
+          </div>
+          <div class="keyboard-hint">
+            Use <span>←</span> <span>→</span> to move through the guide.
+          </div>
+        </div>
+      </section>
+
+      <!-- SIDE PANEL -->
+      <aside class="side-panel">
+        <div class="side-card">
+          <div class="side-card-inner">
+            <div class="side-title">Quick Start</div>
+            <div class="side-body">
+              <ol style="margin-left:16px; margin-top:4px;">
+                <li>Each player: set health to <strong>20</strong>.</li>
+                <li>Shuffle and draw <strong>5 cards</strong>.</li>
+                <li>On your turn:
+                  <ul style="margin-left:16px;">
+                    <li>Untap → Draw → Play → Battle → Play → Pass</li>
+                  </ul>
+                </li>
+              </ol>
+              <p style="margin-top:6px; font-size:0.86rem; color:var(--text-muted);">
+                That’s all you need to start your first duel.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-card-inner">
+            <div class="side-title">Card Roles</div>
+            <div class="side-body">
+              <div class="stat-pill-row">
+                <span class="stat-pill">2–7 → <strong>Gems</strong> (energy)</span>
+                <span class="stat-pill">J/Q/K/A → <strong>Creatures</strong></span>
+                <span class="stat-pill">Red → ♥ ♦</span>
+                <span class="stat-pill">Black → ♠ ♣</span>
+              </div>
+              <p style="margin-top:6px;">
+                Gems pay for creatures and fuel your magic combos like straights, pairs, and sacrifices.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-card-inner">
+            <div class="side-title">Gem Sacrifices</div>
+            <div class="side-body">
+              <ul style="margin-left:16px; margin-top:4px;">
+                <li><strong>2 or 3 → Fireball</strong><br />
+                  2 damage to any creature, or 1 damage to a player.
+                </li>
+                <li><strong>4 or 5 → Mine</strong><br />
+                  Gain 3 bonus energy of that gem’s color (this turn only).
+                </li>
+                <li><strong>6 or 7 → Draw</strong><br />
+                  Draw 1 card.
+                </li>
+              </ul>
+              <p style="margin-top:6px; font-size:0.86rem; color:var(--text-muted);">
+                Sacrificed gems go to your graveyard — powerful one-shots when you really need them.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-card-inner">
+            <div class="side-title">Straight Combos</div>
+            <div class="side-body">
+              <ul style="margin-left:16px; margin-top:4px;">
+                <li><strong>3-card straight</strong> → Gain +1 life.</li>
+                <li><strong>4-card straight</strong> → Draw 1, then discard 1.</li>
+                <li><strong>5-card straight</strong> → Return a creature from your graveyard, then sacrifice 1 gem in the straight.</li>
+                <li><strong>6-card straight</strong> → Take control of an opponent’s creature, then sacrifice 1 gem in the straight.</li>
+              </ul>
+              <p style="margin-top:6px; font-size:0.86rem; color:var(--text-muted);">
+                All straight gems must be the same color — line them up and cash them in when the timing is perfect.
+              </p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const steps = Array.from(document.querySelectorAll(".step"));
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const stepCounter = document.getElementById("stepCounter");
+      const dotsContainer = document.getElementById("dots");
+      let currentIndex = 0;
+
+      function updateDots() {
+        dotsContainer.innerHTML = "";
+        steps.forEach((_, idx) => {
+          const dot = document.createElement("div");
+          dot.className = "dot" + (idx === currentIndex ? " active" : "");
+          dot.addEventListener("click", () => goToStep(idx));
+          dotsContainer.appendChild(dot);
+        });
+      }
+
+      function updateUI() {
+        steps.forEach((step, idx) => {
+          step.classList.toggle("active", idx === currentIndex);
+        });
+
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === steps.length - 1;
+
+        stepCounter.textContent = `Step ${currentIndex + 1} of ${steps.length}`;
+        updateDots();
+      }
+
+      function goToStep(idx) {
+        if (idx < 0 || idx >= steps.length) return;
+        currentIndex = idx;
+        updateUI();
+      }
+
+      prevBtn.addEventListener("click", () => {
+        goToStep(currentIndex - 1);
+      });
+
+      nextBtn.addEventListener("click", () => {
+        goToStep(currentIndex + 1);
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") {
+          goToStep(currentIndex + 1);
+        } else if (e.key === "ArrowLeft") {
+          goToStep(currentIndex - 1);
+        }
+      });
+
+      // Initial paint
+      updateUI();
+    })();
+  </script>
+</body>
+</html>
