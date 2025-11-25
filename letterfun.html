@@ -1,241 +1,728 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta property="og:type" content="website">
   <meta property="og:title" content="ABC Letter Fun by Remote BB">
-  <meta property="og:description" content="Make learning letters a game. Big letters, big smiles — a playful way to explore the alphabet together.">
+  <meta property="og:description"
+    content="Make learning letters a game. Big letters, big smiles — a playful way to explore the alphabet together.">
   <meta property="og:image" content="https://github.com/rmtbb/remotebbsite/blob/main/letterfun/abcletterfunlogo.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://www.remotebb.com/letterfun">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ABC Letter Fun by Remote BB">
-  <meta name="twitter:description" content="Make learning letters a game. Big letters, big smiles — a playful way to explore the alphabet together.">
-  <meta name="twitter:image" content="https://github.com/rmtbb/remotebbsite/blob/main/letterfun/abcletterfunlogo.png?raw=true">
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="twitter:description"
+    content="Make learning letters a game. Big letters, big smiles — a playful way to explore the alphabet together.">
+  <meta name="twitter:image"
+    content="https://github.com/rmtbb/remotebbsite/blob/main/letterfun/abcletterfunlogo.png?raw=true">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>ABC Letter Fun by Remote BB</title>
+  <link rel="manifest" href="manifest.json">
   <style>
-    :root{
-      --bg:#fff; --fg:#111;
-      --btn-bg:#f3f4f6; --btn-fg:#111; --btn-hover:#e5e7eb; --btn-active:#d1d5db;
-      --accent:#2563eb; --accent-2:#ef4444; --accent-3:#10b981; --accent-4:#f59e0b; --accent-5:#7c3aed;
+    :root {
+      --bg: #fff;
+      --fg: #111;
+      --btn-bg: #f3f4f6;
+      --btn-fg: #111;
+      --btn-hover: #e5e7eb;
+      --btn-active: #d1d5db;
+      --accent: #2563eb;
+      --accent-2: #ef4444;
+      --accent-3: #10b981;
+      --accent-4: #f59e0b;
+      --accent-5: #7c3aed;
 
       /* Defaults */
-      --letter-size:80vh;
-      --key-min:44px; --key-pad:10px; --key-font:16px; --key-radius:10px;
+      --letter-size: 80vh;
+      --key-min: 44px;
+      --key-pad: 10px;
+      --key-font: 16px;
+      --key-radius: 10px;
     }
-    @media(prefers-color-scheme:dark){
-      :root{
-        --bg:#0b0f14; --fg:#e5e7eb;
-        --btn-bg:#111827; --btn-fg:#e5e7eb; --btn-hover:#1f2937; --btn-active:#374151;
-        --accent:#60a5fa; --accent-2:#f87171; --accent-3:#34d399; --accent-4:#fbbf24; --accent-5:#a78bfa;
+
+    @media(prefers-color-scheme:dark) {
+      :root {
+        --bg: #0b0f14;
+        --fg: #e5e7eb;
+        --btn-bg: #111827;
+        --btn-fg: #e5e7eb;
+        --btn-hover: #1f2937;
+        --btn-active: #374151;
+        --accent: #60a5fa;
+        --accent-2: #f87171;
+        --accent-3: #34d399;
+        --accent-4: #fbbf24;
+        --accent-5: #a78bfa;
       }
     }
-    html,body{
-      height:100%; margin:0; background:var(--bg); color:var(--fg);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;
-    }
-    .app{min-height:100%; display:grid; grid-template-rows:1fr auto; gap:16px;}
 
-    .stage{
-      position:relative; display:flex; justify-content:center; align-items:center;
-      padding:24px; overflow:hidden;
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+      touch-action: manipulation;
+      /* Prevents double-tap zoom */
+      -webkit-tap-highlight-color: transparent;
+      /* Removes tap highlight on mobile */
     }
-    .stage.align-left{justify-content:flex-start;}
-    .stage.align-center{justify-content:center;}
-    .stage.align-right{justify-content:flex-end;}
 
-    .letter{
-      font-weight:800; font-size:var(--letter-size); line-height:1; letter-spacing:.02em;
-      user-select:none; -webkit-user-select:none;
-      transition:transform 120ms ease, color 120ms ease, text-shadow 120ms ease;
-      text-align:center;
+    .app {
+      min-height: 100%;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 16px;
+    }
+
+    .stage {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .stage.align-left {
+      justify-content: flex-start;
+    }
+
+    .stage.align-center {
+      justify-content: center;
+    }
+
+    .stage.align-right {
+      justify-content: flex-end;
+    }
+
+    .letter {
+      font-weight: 800;
+      font-size: var(--letter-size);
+      line-height: 1;
+      letter-spacing: .02em;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: transform 120ms ease, color 120ms ease, text-shadow 120ms ease;
+      text-align: center;
       will-change: transform, color, text-shadow;
+      white-space: nowrap;
+      /* Keep on one line for auto-fit */
     }
-    .letter.empty::after{content:"";}
 
-    .controls{
-      position:sticky; bottom:0;
-      padding:10px 10px calc(10px + env(safe-area-inset-bottom));
-      background:linear-gradient(to top, color-mix(in oklab, var(--bg) 92%, transparent), transparent 24px);
+    .letter.empty::after {
+      content: "";
+    }
+
+    .controls {
+      position: sticky;
+      bottom: 0;
+      padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
+      background: linear-gradient(to top, color-mix(in oklab, var(--bg) 92%, transparent), transparent 24px);
       backdrop-filter: blur(6px);
     }
-    .row{display:grid; grid-template-columns:repeat(auto-fit, minmax(var(--key-min),1fr)); gap:8px; align-items:center;}
-    button{
-      appearance:none; background:var(--btn-bg); color:var(--btn-fg);
-      border:1px solid var(--btn-hover); border-radius:var(--key-radius);
-      padding:var(--key-pad) 0; font-weight:700; font-size:var(--key-font); line-height:1; cursor:pointer;
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(var(--key-min), 1fr));
+      gap: 8px;
+      align-items: center;
+    }
+
+    button {
+      appearance: none;
+      background: var(--btn-bg);
+      color: var(--btn-fg);
+      border: 1px solid var(--btn-hover);
+      border-radius: var(--key-radius);
+      padding: var(--key-pad) 0;
+      font-weight: 700;
+      font-size: var(--key-font);
+      line-height: 1;
+      cursor: pointer;
       transition: transform 80ms ease, background 80ms ease, border-color 80ms ease;
     }
-    button:hover{background:var(--btn-hover);}
-    button:active{background:var(--btn-active); transform:translateY(1px);}
-    button:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
-    .btn--wide{grid-column:span 2;}
-    @media(min-width:720px){.btn--wide{grid-column:span 1;}}
-    .actions{margin-top:8px;}
+
+    button:hover {
+      background: var(--btn-hover);
+    }
+
+    button:active,
+    button.btn-press {
+      background: var(--btn-active);
+      transform: scale(0.94);
+      border-color: var(--accent);
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn--wide {
+      grid-column: span 2;
+    }
+
+    @media(min-width:720px) {
+      .btn--wide {
+        grid-column: span 1;
+      }
+    }
+
+    .actions {
+      margin-top: 8px;
+    }
+
+    /* New styles */
+    .row.numbers {
+      margin-bottom: 8px;
+    }
+
+    .btn-control {
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .btn-toggle.is-active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-toggle.is-active:hover {
+      background: var(--accent);
+      opacity: 0.9;
+    }
+
+    .hidden {
+      display: none !important;
+    }
 
     /* ---------- Effects (class-based) ---------- */
     @keyframes fx-shake {
-      10%,90%{transform:translate(-1px,0) rotate(-0.5deg)}
-      20%,80%{transform:translate(2px,0) rotate(0.5deg)}
-      30%,50%,70%{transform:translate(-2px,0) rotate(-1deg)}
-      40%,60%{transform:translate(2px,0) rotate(1deg)}
+
+      10%,
+      90% {
+        transform: translate(-1px, 0) rotate(-0.5deg)
+      }
+
+      20%,
+      80% {
+        transform: translate(2px, 0) rotate(0.5deg)
+      }
+
+      30%,
+      50%,
+      70% {
+        transform: translate(-2px, 0) rotate(-1deg)
+      }
+
+      40%,
+      60% {
+        transform: translate(2px, 0) rotate(1deg)
+      }
     }
-    .is-shaking{animation:fx-shake 500ms ease-in-out both;}
+
+    .is-shaking {
+      animation: fx-shake 500ms ease-in-out both;
+    }
 
     @keyframes fx-pulse {
-      0%{transform:scale(1)}
-      50%{transform:scale(1.2); color:var(--accent)}
-      100%{transform:scale(1)}
+      0% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.2);
+        color: var(--accent)
+      }
+
+      100% {
+        transform: scale(1)
+      }
     }
-    .is-pulsing{animation:fx-pulse 600ms ease-in-out both;}
+
+    .is-pulsing {
+      animation: fx-pulse 600ms ease-in-out both;
+    }
 
     @keyframes fx-spin {
-      0%{transform:rotateY(0) scale(1)}
-      50%{transform:rotateY(180deg) scale(1.12); color:var(--accent-5)}
-      100%{transform:rotateY(360deg) scale(1)}
+      0% {
+        transform: rotateY(0) scale(1)
+      }
+
+      50% {
+        transform: rotateY(180deg) scale(1.12);
+        color: var(--accent-5)
+      }
+
+      100% {
+        transform: rotateY(360deg) scale(1)
+      }
     }
-    .is-spinning{animation:fx-spin 800ms ease-in-out both; transform-style:preserve-3d;}
+
+    .is-spinning {
+      animation: fx-spin 800ms ease-in-out both;
+      transform-style: preserve-3d;
+    }
 
     @keyframes fx-bounce {
-      0%,100%{transform:translateY(0)}
-      30%{transform:translateY(-24px)}
-      60%{transform:translateY(-8px)}
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      30% {
+        transform: translateY(-24px)
+      }
+
+      60% {
+        transform: translateY(-8px)
+      }
     }
-    .is-bouncing{animation:fx-bounce 600ms ease both;}
+
+    .is-bouncing {
+      animation: fx-bounce 600ms ease both;
+    }
 
     @keyframes fx-rainbow {
-      0%{color:var(--accent)}
-      20%{color:var(--accent-2)}
-      40%{color:var(--accent-3)}
-      60%{color:var(--accent-4)}
-      80%{color:var(--accent-5)}
-      100%{color:var(--fg)}
+      0% {
+        color: var(--accent)
+      }
+
+      20% {
+        color: var(--accent-2)
+      }
+
+      40% {
+        color: var(--accent-3)
+      }
+
+      60% {
+        color: var(--accent-4)
+      }
+
+      80% {
+        color: var(--accent-5)
+      }
+
+      100% {
+        color: var(--fg)
+      }
     }
-    .is-rainbow{animation:fx-rainbow 900ms linear both;}
+
+    .is-rainbow {
+      animation: fx-rainbow 900ms linear both;
+    }
 
     @keyframes fx-jelly {
-      0%{transform:scale(1,1)}
-      30%{transform:scale(1.25,0.8)}
-      55%{transform:scale(0.9,1.1)}
-      75%{transform:scale(1.05,0.97)}
-      100%{transform:scale(1,1)}
-    }
-    .is-jelly{animation:fx-jelly 700ms ease both;}
+      0% {
+        transform: scale(1, 1)
+      }
 
-    @keyframes fx-tilt { 0%{transform:rotate(-8deg)} 50%{transform:rotate(8deg)} 100%{transform:rotate(0)} }
-    .is-tilting{animation:fx-tilt 500ms ease both;}
+      30% {
+        transform: scale(1.25, 0.8)
+      }
+
+      55% {
+        transform: scale(0.9, 1.1)
+      }
+
+      75% {
+        transform: scale(1.05, 0.97)
+      }
+
+      100% {
+        transform: scale(1, 1)
+      }
+    }
+
+    .is-jelly {
+      animation: fx-jelly 700ms ease both;
+    }
+
+    @keyframes fx-tilt {
+      0% {
+        transform: rotate(-8deg)
+      }
+
+      50% {
+        transform: rotate(8deg)
+      }
+
+      100% {
+        transform: rotate(0)
+      }
+    }
+
+    .is-tilting {
+      animation: fx-tilt 500ms ease both;
+    }
 
     @keyframes fx-glow {
-      0%{text-shadow:0 0 0 rgba(0,0,0,0)}
-      50%{text-shadow:0 0 28px color-mix(in oklab, var(--accent) 60%, white)}
-      100%{text-shadow:0 0 0 rgba(0,0,0,0)}
-    }
-    .is-glowing{animation:fx-glow 900ms ease both;}
+      0% {
+        text-shadow: 0 0 0 rgba(0, 0, 0, 0)
+      }
 
-    @keyframes fx-squash { 0%{transform:scale(1)} 40%{transform:scale(1.35,0.75)} 100%{transform:scale(1)} }
-    .is-squash{animation:fx-squash 420ms ease-out both;}
+      50% {
+        text-shadow: 0 0 28px color-mix(in oklab, var(--accent) 60%, white)
+      }
+
+      100% {
+        text-shadow: 0 0 0 rgba(0, 0, 0, 0)
+      }
+    }
+
+    .is-glowing {
+      animation: fx-glow 900ms ease both;
+    }
+
+    @keyframes fx-squash {
+      0% {
+        transform: scale(1)
+      }
+
+      40% {
+        transform: scale(1.35, 0.75)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    .is-squash {
+      animation: fx-squash 420ms ease-out both;
+    }
 
     @keyframes fx-wobble {
-      0%{transform:rotate(0)}
-      15%{transform:rotate(-10deg)}
-      30%{transform:rotate(8deg)}
-      45%{transform:rotate(-6deg)}
-      60%{transform:rotate(4deg)}
-      75%{transform:rotate(-2deg)}
-      100%{transform:rotate(0)}
+      0% {
+        transform: rotate(0)
+      }
+
+      15% {
+        transform: rotate(-10deg)
+      }
+
+      30% {
+        transform: rotate(8deg)
+      }
+
+      45% {
+        transform: rotate(-6deg)
+      }
+
+      60% {
+        transform: rotate(4deg)
+      }
+
+      75% {
+        transform: rotate(-2deg)
+      }
+
+      100% {
+        transform: rotate(0)
+      }
     }
-    .is-wobbling{animation:fx-wobble 700ms ease-out both;}
+
+    .is-wobbling {
+      animation: fx-wobble 700ms ease-out both;
+    }
 
     /* Extra class-based effects */
-    @keyframes fx-pop { 0%{transform:scale(0.9)} 50%{transform:scale(1.25)} 100%{transform:scale(1)} }
-    .is-pop{animation:fx-pop 420ms cubic-bezier(.2,.8,.2,1) both;}
+    @keyframes fx-pop {
+      0% {
+        transform: scale(0.9)
+      }
 
-    @keyframes fx-swing { 20%{transform:rotate(12deg)} 40%{transform:rotate(-9deg)} 60%{transform:rotate(6deg)} 80%{transform:rotate(-3deg)} 100%{transform:rotate(0)} }
-    .is-swing{animation:fx-swing 700ms ease-out both;}
+      50% {
+        transform: scale(1.25)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    .is-pop {
+      animation: fx-pop 420ms cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    @keyframes fx-swing {
+      20% {
+        transform: rotate(12deg)
+      }
+
+      40% {
+        transform: rotate(-9deg)
+      }
+
+      60% {
+        transform: rotate(6deg)
+      }
+
+      80% {
+        transform: rotate(-3deg)
+      }
+
+      100% {
+        transform: rotate(0)
+      }
+    }
+
+    .is-swing {
+      animation: fx-swing 700ms ease-out both;
+    }
 
     @keyframes fx-flip {
-      0%{transform:rotateX(0) scale(1)}
-      50%{transform:rotateX(180deg) scale(1.12); color:var(--accent-3)}
-      100%{transform:rotateX(360deg) scale(1)}
+      0% {
+        transform: rotateX(0) scale(1)
+      }
+
+      50% {
+        transform: rotateX(180deg) scale(1.12);
+        color: var(--accent-3)
+      }
+
+      100% {
+        transform: rotateX(360deg) scale(1)
+      }
     }
-    .is-flip{animation:fx-flip 800ms ease both; transform-style:preserve-3d;}
+
+    .is-flip {
+      animation: fx-flip 800ms ease both;
+      transform-style: preserve-3d;
+    }
 
     @keyframes fx-zoomspin {
-      0%{transform:scale(0.9) rotate(0deg)}
-      50%{transform:scale(1.2) rotate(180deg); color:var(--accent-4)}
-      100%{transform:scale(1) rotate(360deg)}
+      0% {
+        transform: scale(0.9) rotate(0deg)
+      }
+
+      50% {
+        transform: scale(1.2) rotate(180deg);
+        color: var(--accent-4)
+      }
+
+      100% {
+        transform: scale(1) rotate(360deg)
+      }
     }
-    .is-zoomspin{animation:fx-zoomspin 800ms ease-in-out both;}
+
+    .is-zoomspin {
+      animation: fx-zoomspin 800ms ease-in-out both;
+    }
 
     /* ---------- Generated visuals ---------- */
-    .burst,.confetti,.ring,.trail,.stars{position:absolute; inset:0; pointer-events:none;}
-    .burst span,.ring span,.stars i{
-      position:absolute; font-weight:800; opacity:0; transform:translate(-50%,-50%) scale(0.6);
+    .burst,
+    .confetti,
+    .ring,
+    .trail,
+    .stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
     }
+
+    .burst span,
+    .ring span,
+    .stars i {
+      position: absolute;
+      font-weight: 800;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.6);
+    }
+
     @keyframes fx-burst {
-      0%{opacity:0; transform:translate(-50%,-50%) scale(0.6)}
-      30%{opacity:1}
-      100%{opacity:0; transform:translate(-50%,-120%) scale(1.4)}
-    }
-    .burst span{animation:fx-burst 700ms ease-out forwards; color:var(--accent-3);}
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.6)
+      }
 
-    .confetti i{
-      position:absolute; width:8px; height:8px; border-radius:2px; opacity:0;
-      transform:translate(-50%,-50%) scale(0.8);
+      30% {
+        opacity: 1
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -120%) scale(1.4)
+      }
     }
+
+    .burst span {
+      animation: fx-burst 700ms ease-out forwards;
+      color: var(--accent-3);
+    }
+
+    .confetti i {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+    }
+
     @keyframes fx-confetti {
-      0%{opacity:0; transform:translate(-50%,-50%) translateY(-10px) scale(0.8)}
-      15%{opacity:1}
-      100%{opacity:0; transform:translate(-50%,-50%) translateY(140px) rotate(180deg) scale(1)}
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(-10px) scale(0.8)
+      }
+
+      15% {
+        opacity: 1
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(140px) rotate(180deg) scale(1)
+      }
     }
 
-    .trail b{
-      position:absolute; font-weight:800; opacity:0.25; transform:translate(-50%,-50%); filter:blur(1px);
+    .trail b {
+      position: absolute;
+      font-weight: 800;
+      opacity: 0.25;
+      transform: translate(-50%, -50%);
+      filter: blur(1px);
     }
-    @keyframes fx-trail { 0%{opacity:0.25} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.3)} }
+
+    @keyframes fx-trail {
+      0% {
+        opacity: 0.25
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.3)
+      }
+    }
 
     @keyframes fx-ring {
-      0%{opacity:0; transform:translate(-50%,-50%) scale(0.6)}
-      20%{opacity:1}
-      100%{opacity:0; transform:translate(-50%,-50%) scale(1.6)}
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.6)
+      }
+
+      20% {
+        opacity: 1
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.6)
+      }
     }
-    .ring span{animation:fx-ring 900ms ease-out forwards; color:var(--accent-4); }
+
+    .ring span {
+      animation: fx-ring 900ms ease-out forwards;
+      color: var(--accent-4);
+    }
 
     /* Star swirl */
-    .stars i{ font-style:normal; color:var(--accent-5); opacity:.9; }
+    .stars i {
+      font-style: normal;
+      color: var(--accent-5);
+      opacity: .9;
+    }
 
     /* When random pressed with no letter, flash border to hint */
-    .stage.flash{ box-shadow: inset 0 0 0 4px var(--accent-2); animation: fx-flash 600ms ease-out; }
+    .stage.flash {
+      box-shadow: inset 0 0 0 4px var(--accent-2);
+      animation: fx-flash 600ms ease-out;
+    }
+
     @keyframes fx-flash {
-      0%,100%{box-shadow: inset 0 0 0 0 var(--accent-2);}
-      20%{box-shadow: inset 0 0 0 8px var(--accent-2);}
+
+      0%,
+      100% {
+        box-shadow: inset 0 0 0 0 var(--accent-2);
+      }
+
+      20% {
+        box-shadow: inset 0 0 0 8px var(--accent-2);
+      }
     }
 
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      .is-shaking,.is-pulsing,.is-spinning,.is-bouncing,.is-rainbow,
-      .is-jelly,.is-tilting,.is-glowing,.is-squash,.is-wobbling,
-      .is-pop,.is-swing,.is-flip,.is-zoomspin,
-      .burst span,.confetti i,.trail b,.ring span,.stars i{
-        animation-duration:1ms !important;
+
+      .is-shaking,
+      .is-pulsing,
+      .is-spinning,
+      .is-bouncing,
+      .is-rainbow,
+      .is-jelly,
+      .is-tilting,
+      .is-glowing,
+      .is-squash,
+      .is-wobbling,
+      .is-pop,
+      .is-swing,
+      .is-flip,
+      .is-zoomspin,
+      .burst span,
+      .confetti i,
+      .trail b,
+      .ring span,
+      .stars i {
+        animation-duration: 1ms !important;
       }
     }
 
     /* ---------- Button size presets on <body> ---------- */
     /* Smallest (default) */
-    body.btn-size-1{ --key-min:44px; --key-pad:10px; --key-font:16px; --key-radius:10px; }
+    body.btn-size-1 {
+      --key-min: 44px;
+      --key-pad: 10px;
+      --key-font: 16px;
+      --key-radius: 10px;
+    }
+
     /* Step 2 */
-    body.btn-size-2{ --key-min:56px; --key-pad:12px; --key-font:18px; --key-radius:12px; }
+    body.btn-size-2 {
+      --key-min: 56px;
+      --key-pad: 12px;
+      --key-font: 18px;
+      --key-radius: 12px;
+    }
+
     /* Step 3 */
-    body.btn-size-3{ --key-min:68px; --key-pad:14px; --key-font:20px; --key-radius:12px; }
+    body.btn-size-3 {
+      --key-min: 68px;
+      --key-pad: 14px;
+      --key-font: 20px;
+      --key-radius: 12px;
+    }
+
     /* Step 4 */
-    body.btn-size-4{ --key-min:84px; --key-pad:16px; --key-font:22px; --key-radius:14px; }
+    body.btn-size-4 {
+      --key-min: 84px;
+      --key-pad: 16px;
+      --key-font: 22px;
+      --key-radius: 14px;
+    }
+
     /* Largest */
-    body.btn-size-5{ --key-min:104px; --key-pad:18px; --key-font:24px; --key-radius:16px; }
+    body.btn-size-5 {
+      --key-min: 104px;
+      --key-pad: 18px;
+      --key-font: 24px;
+      --key-radius: 16px;
+    }
+
+    /* Hidden Keyboard */
+    body.keyboard-hidden #alpha-row,
+    body.keyboard-hidden #num-row {
+      display: none !important;
+    }
   </style>
 </head>
+
 <body class="btn-size-1">
   <div class="app">
     <!-- Display -->
@@ -246,12 +733,20 @@
 
     <!-- Controls -->
     <footer class="controls" aria-label="Alphabet controls">
+      <div class="row numbers" id="num-row"><!-- 0-9 injected by JS --></div>
       <div class="row" id="alpha-row"><!-- A–Z injected by JS --></div>
       <div class="row actions">
         <button type="button" data-char="" class="btn--wide">Blank</button>
         <button type="button" data-char="?" class="btn--wide">?</button>
 
+        <!-- Number controls -->
+        <button type="button" id="btnDec" class="btn-control hidden">−</button>
+        <button type="button" id="btnInc" class="btn-control hidden">+</button>
+
         <!-- Toggles -->
+        <button type="button" id="modeToggle" class="btn--wide btn-toggle">123</button>
+        <button type="button" id="multiToggle" class="btn--wide btn-toggle">Multi</button>
+        <button type="button" id="caseToggle" class="btn--wide btn-toggle">abc</button>
         <button type="button" id="alignToggle" class="btn--wide">Align</button>
         <button type="button" id="buttonsToggle" class="btn--wide">Buttons</button>
         <button type="button" id="sizeToggle" class="btn--wide">Size</button>
@@ -262,26 +757,59 @@
   <script>
     const display = document.getElementById('display');
     const alphaRow = document.getElementById('alpha-row');
+    const numRow = document.getElementById('num-row');
     const stage = document.getElementById('stage');
     const alignToggle = document.getElementById('alignToggle');
     const buttonsToggle = document.getElementById('buttonsToggle');
     const sizeToggle = document.getElementById('sizeToggle');
+    const caseToggle = document.getElementById('caseToggle');
+    const modeToggle = document.getElementById('modeToggle');
+    const multiToggle = document.getElementById('multiToggle');
+    const btnDec = document.getElementById('btnDec');
+    const btnInc = document.getElementById('btnInc');
+
+    let isLowerCase = false;
+    let isNumberMode = false;
+    let isMultiMode = false; // If true, allows typing multiple chars
+    let inputBuffer = '';
+    let inputTimer = null;
+    let userHasSetButtonSize = false;
+
 
     /* Build A–Z buttons */
-    for (let i = 0; i < 26; i++) {
-      const ch = String.fromCharCode('A'.charCodeAt(0) + i);
+    function buildAlpha() {
+      alphaRow.innerHTML = '';
+      const start = isLowerCase ? 'a'.charCodeAt(0) : 'A'.charCodeAt(0);
+      for (let i = 0; i < 26; i++) {
+        const ch = String.fromCharCode(start + i);
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = ch;
+        b.dataset.char = ch;
+        b.setAttribute('aria-label', `Show ${ch}`);
+        alphaRow.appendChild(b);
+      }
+    }
+    buildAlpha();
+
+    /* Build 0-9 buttons */
+    for (let i = 0; i <= 9; i++) {
       const b = document.createElement('button');
       b.type = 'button';
-      b.textContent = ch;
-      b.dataset.char = ch;
-      b.setAttribute('aria-label', `Show ${ch}`);
-      alphaRow.appendChild(b);
+      b.textContent = i;
+      b.dataset.num = i;
+      b.setAttribute('aria-label', `Show ${i}`);
+      numRow.appendChild(b);
     }
 
-    /* Clicks: letters / blank / ? / toggles */
+    // Default state: Hide numbers
+    numRow.classList.add('hidden');
+
+    /* Clicks: letters / numbers / blank / ? / toggles */
     document.addEventListener('click', (e) => {
       const b = e.target.closest('button');
       if (b) {
+        triggerButtonFeedback(b);
         if (b.dataset.char !== undefined) {
           // If blank button pressed, clear with exit
           if (b.dataset.char === '') {
@@ -291,9 +819,18 @@
           }
           return;
         }
+        if (b.dataset.num !== undefined) {
+          handleNumberInput(b.dataset.num);
+          return;
+        }
         if (b === alignToggle) { cycleAlign(); return; }
         if (b === buttonsToggle) { cycleButtonSize(); return; }
         if (b === sizeToggle) { cycleLetterSize(); return; }
+        if (b === caseToggle) { toggleCase(); return; }
+        if (b === modeToggle) { toggleMode(); return; }
+        if (b === multiToggle) { toggleMulti(); return; }
+        if (b === btnInc) { adjustNumber(1); return; }
+        if (b === btnDec) { adjustNumber(-1); return; }
       }
     });
 
@@ -304,16 +841,33 @@
       doRandomAction();
     });
 
-    /* Keyboard: A–Z, '?', Space(blank), Backspace/Delete(clear with exit), Enter(random) */
+    /* Keyboard: A–Z, 0-9, '?', Space(blank), Backspace/Delete(clear with exit), Enter(random) */
     document.addEventListener('keydown', (e) => {
       const k = e.key;
       if (/^[a-z]$/i.test(k)) {
-        handleCharInput(k.toUpperCase());
+        // If we are in lowercase mode, use lowercase, else upper
+        const char = isLowerCase ? k.toLowerCase() : k.toUpperCase();
+        handleInput(char);
+        highlightButton('char', char);
+      } else if (/^[0-9]$/.test(k)) {
+        handleInput(k);
+        highlightButton('num', k);
+      } else if (k === '+' || k === '=') {
+        adjustNumber(1);
+        triggerButtonFeedback(btnInc);
+      } else if (k === '-' || k === '_') {
+        adjustNumber(-1);
+        triggerButtonFeedback(btnDec);
       } else if (k === '?' || (k === '/' && e.shiftKey)) {
         handleCharInput('?');
+        // Find ? button
+        const btn = [...document.querySelectorAll('button')].find(b => b.dataset.char === '?');
+        if (btn) triggerButtonFeedback(btn);
       } else if (k === ' ' || k === 'Spacebar') {
         e.preventDefault();
         clearWithExit();
+        const btn = [...document.querySelectorAll('button')].find(b => b.dataset.char === '');
+        if (btn) triggerButtonFeedback(btn);
       } else if (k === 'Backspace' || k === 'Delete') {
         e.preventDefault();
         clearWithExit();
@@ -323,54 +877,199 @@
       }
     });
 
-    function handleCharInput(ch) {
-      const current = display.textContent;
-      if (ch === '' || current !== ch) {
-        setDisplay(ch);
+    function highlightButton(type, val) {
+      let btn;
+      if (type === 'char') {
+        // Case insensitive search for button
+        btn = [...alphaRow.children].find(b => b.dataset.char.toLowerCase() === val.toLowerCase());
+      } else if (type === 'num') {
+        btn = [...numRow.children].find(b => b.dataset.num === val);
+      }
+      if (btn) triggerButtonFeedback(btn);
+    }
+
+    function triggerButtonFeedback(btn) {
+      if (!btn) return;
+      btn.classList.remove('btn-press');
+      void btn.offsetWidth; // reflow
+      btn.classList.add('btn-press');
+      setTimeout(() => btn.classList.remove('btn-press'), 150);
+    }
+
+    // Unified input handler for both chars and numbers
+    function handleInput(char) {
+      // If multi mode is OFF, just set immediately
+      if (!isMultiMode) {
+        // If it's same as current, random action
+        if (display.textContent === char) {
+          doRandomAction();
+        } else {
+          setDisplay(char);
+        }
+        return;
+      }
+
+      // Multi mode ON: buffer logic
+      if (inputTimer) {
+        clearTimeout(inputTimer);
+        inputTimer = null;
+        inputBuffer += char;
       } else {
-        doRandomAction(); // pressing the same char triggers fun
+        inputBuffer = char;
+      }
+
+      setDisplay(inputBuffer);
+
+      // Wait 1s before resetting buffer session
+      inputTimer = setTimeout(() => {
+        inputTimer = null;
+      }, 1000);
+    }
+
+    // Legacy wrappers if needed, or just replaced
+    function handleCharInput(ch) { handleInput(ch); }
+    function handleNumberInput(n) { handleInput(n); }
+
+    function adjustNumber(delta) {
+      const current = parseInt(display.textContent, 10);
+      if (!isNaN(current)) {
+        const next = current + delta;
+        inputBuffer = next.toString();
+        setDisplay(next.toString());
+        doRandomAction();
       }
     }
 
     function setDisplay(ch) {
       display.textContent = ch || '';
       display.classList.toggle('empty', !ch);
+
+      // Check if it's a number to show +/-
+      const isNum = /^-?\d+$/.test(ch);
+      btnDec.classList.toggle('hidden', !isNum);
+      btnInc.classList.toggle('hidden', !isNum);
+
+      // Dynamic font scaling for long text
+      // Reset to base size first
+      display.style.fontSize = letterSizes[letterStep - 1];
+
       // tiny pop
       display.style.transform = 'scale(1.04)';
-      requestAnimationFrame(() => setTimeout(() => display.style.transform = 'scale(1)', 80));
+      requestAnimationFrame(() => {
+        fitText();
+        setTimeout(() => display.style.transform = 'scale(1)', 80);
+      });
+    }
+
+    function fitText() {
+      const ch = display.textContent;
+      if (!ch) return;
+
+      // Reset to max size to measure
+      display.style.fontSize = letterSizes[letterStep - 1];
+
+      const stageRect = stage.getBoundingClientRect();
+      // We need the content width/height. 
+      // display is a block, so clientWidth is full width.
+      // We use scrollWidth to see actual content size.
+
+      const dW = display.scrollWidth;
+      const dH = display.scrollHeight;
+      const sW = stageRect.width - 48; // padding
+      const sH = stageRect.height - 48;
+
+      // If it fits, we are done (it's already at max size)
+      if (dW <= sW && dH <= sH) return;
+
+      // Calculate ratio
+      const currentSize = parseFloat(getComputedStyle(display).fontSize);
+      const wRatio = sW / dW;
+      const hRatio = sH / dH;
+      const ratio = Math.min(wRatio, hRatio);
+
+      // Apply new size with slight safety margin
+      display.style.fontSize = (currentSize * ratio * 0.95) + 'px';
+    }
+
+    function toggleMulti() {
+      isMultiMode = !isMultiMode;
+      multiToggle.classList.toggle('is-active', isMultiMode);
+      // Visual feedback or label change? 
+      // "Multi" is fine.
+    }
+
+    function toggleCase() {
+      isLowerCase = !isLowerCase;
+      caseToggle.classList.toggle('is-active', isLowerCase);
+      // Label should show what we switch TO
+      caseToggle.textContent = isLowerCase ? 'ABC' : 'abc';
+
+      buildAlpha();
+      // Update current display if it's a letter
+      const current = display.textContent;
+      if (current && /^[a-z]$/i.test(current)) {
+        setDisplay(isLowerCase ? current.toLowerCase() : current.toUpperCase());
+      }
+    }
+
+    function toggleMode() {
+      isNumberMode = !isNumberMode;
+      modeToggle.classList.toggle('is-active', isNumberMode);
+      modeToggle.textContent = isNumberMode ? 'ABC' : '123';
+
+      // Toggle visibility
+      alphaRow.classList.toggle('hidden', isNumberMode);
+      numRow.classList.toggle('hidden', !isNumberMode);
+
+      // Hide case toggle in number mode (not relevant)
+      caseToggle.classList.toggle('hidden', isNumberMode);
     }
 
     /* -------- Align toggle -------- */
-    const positions = ['left','center','right'];
-    function cycleAlign(){
+    const positions = ['left', 'center', 'right'];
+    function cycleAlign() {
       const idx = positions.findIndex(p => stage.classList.contains('align-' + p));
       const next = positions[(idx + 1) % positions.length];
-      stage.classList.remove('align-left','align-center','align-right');
+      stage.classList.remove('align-left', 'align-center', 'align-right');
       stage.classList.add('align-' + next);
     }
 
-    /* -------- Buttons toggle (5 sizes, smallest default) -------- */
-    let buttonStep = 1; // 1..5
-    function cycleButtonSize(){
-      buttonStep = buttonStep % 5 + 1;
-      document.body.classList.remove('btn-size-1','btn-size-2','btn-size-3','btn-size-4','btn-size-5');
-      document.body.classList.add('btn-size-' + buttonStep);
+    /* -------- Buttons toggle (5 sizes + Hidden) -------- */
+    let buttonStep = 1; // 1..5, 6=Hidden
+    // userHasSetButtonSize is declared above
+    function cycleButtonSize() {
+      userHasSetButtonSize = true;
+      buttonStep = buttonStep + 1;
+      if (buttonStep > 6) buttonStep = 1;
+
+      // Reset classes
+      document.body.classList.remove('btn-size-1', 'btn-size-2', 'btn-size-3', 'btn-size-4', 'btn-size-5');
+
+      if (buttonStep === 6) {
+        // Hidden state
+        document.body.classList.add('keyboard-hidden');
+        buttonsToggle.textContent = 'Show Keys';
+      } else {
+        document.body.classList.remove('keyboard-hidden');
+        document.body.classList.add('btn-size-' + buttonStep);
+        buttonsToggle.textContent = 'Buttons';
+      }
     }
 
     /* -------- Letter size toggle (5 steps) -------- */
-    const letterSizes = ['40vh','60vh','80vh','100vh','120vh']; // 1..5
+    const letterSizes = ['40vh', '60vh', '80vh', '100vh', '120vh']; // 1..5
     let letterStep = 3; // start at 80vh
-    function cycleLetterSize(){
+    function cycleLetterSize() {
       letterStep = letterStep % 5 + 1;
       display.style.fontSize = letterSizes[letterStep - 1];
     }
 
     /* -------- Random Effects (class & generated) -------- */
     const classEffects = [
-      'is-shaking','is-pulsing','is-spinning','is-bouncing','is-rainbow',
-      'is-jelly','is-tilting','is-glowing','is-squash','is-wobbling',
+      'is-shaking', 'is-pulsing', 'is-spinning', 'is-bouncing', 'is-rainbow',
+      'is-jelly', 'is-tilting', 'is-glowing', 'is-squash', 'is-wobbling',
       // extra ones
-      'is-pop','is-swing','is-flip','is-zoomspin'
+      'is-pop', 'is-swing', 'is-flip', 'is-zoomspin'
     ];
 
     function doRandomAction() {
@@ -427,19 +1126,19 @@
       layer.className = 'confetti';
       stage.appendChild(layer);
       const center = centerOf(display, stage);
-      const colors = [ 'var(--accent)', 'var(--accent-2)', 'var(--accent-3)', 'var(--accent-4)', 'var(--accent-5)' ];
+      const colors = ['var(--accent)', 'var(--accent-2)', 'var(--accent-3)', 'var(--accent-4)', 'var(--accent-5)'];
       const count = 28 + Math.floor(Math.random() * 20);
       for (let i = 0; i < count; i++) {
         const dot = document.createElement('i');
         dot.style.left = center.x + 'px';
         dot.style.top = center.y + 'px';
         dot.style.background = colors[i % colors.length];
-        dot.style.width = (6 + Math.random()*6)+'px';
+        dot.style.width = (6 + Math.random() * 6) + 'px';
         dot.style.height = dot.style.width;
         dot.animate([
-          { transform:'translate(-50%,-50%) translateX(0) translateY(-10px) rotate(0deg)', opacity:0 },
-          { transform:`translate(-50%,-50%) translateX(${Math.random()*160-80}px) translateY(140px) rotate(${Math.random()*360}deg)`, opacity:0 }
-        ], { duration: 650 + Math.random()*300, easing:'ease-out', fill:'forwards' });
+          { transform: 'translate(-50%,-50%) translateX(0) translateY(-10px) rotate(0deg)', opacity: 0 },
+          { transform: `translate(-50%,-50%) translateX(${Math.random() * 160 - 80}px) translateY(140px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+        ], { duration: 650 + Math.random() * 300, easing: 'ease-out', fill: 'forwards' });
         layer.appendChild(dot);
       }
       setTimeout(() => layer.remove(), 1200);
@@ -457,9 +1156,9 @@
         s.textContent = ch;
         const angle = (i / n) * Math.PI * 2;
         s.style.left = (center.x + Math.cos(angle) * radius) + 'px';
-        s.style.top  = (center.y + Math.sin(angle) * radius) + 'px';
+        s.style.top = (center.y + Math.sin(angle) * radius) + 'px';
         s.style.fontSize = '40px';
-        s.style.animationDelay = (i*15)+'ms';
+        s.style.animationDelay = (i * 15) + 'ms';
         layer.appendChild(s);
       }
       setTimeout(() => layer.remove(), 1100);
@@ -476,13 +1175,13 @@
       for (let i = 0; i < echoes; i++) {
         const b = document.createElement('b');
         b.textContent = ch;
-        const jitterX = (Math.random()*24 - 12);
-        const jitterY = (Math.random()*24 - 12);
+        const jitterX = (Math.random() * 24 - 12);
+        const jitterY = (Math.random() * 24 - 12);
         b.style.left = (center.x + jitterX) + 'px';
         b.style.top = (center.y + jitterY) + 'px';
         b.style.fontSize = (letterHeight * 0.6) + 'px';
         b.style.color = 'currentColor';
-        b.style.animation = `fx-trail ${350 + i*40}ms ease-out forwards`;
+        b.style.animation = `fx-trail ${350 + i * 40}ms ease-out forwards`;
         layer.appendChild(b);
       }
       setTimeout(() => layer.remove(), 900);
@@ -494,22 +1193,22 @@
       layer.className = 'stars';
       stage.appendChild(layer);
       const center = centerOf(display, stage);
-      const n = 10 + Math.floor(Math.random()*6);
+      const n = 10 + Math.floor(Math.random() * 6);
       const radius = 30;
       for (let i = 0; i < n; i++) {
         const star = document.createElement('i');
         star.textContent = '✦';
         star.style.left = center.x + 'px';
         star.style.top = center.y + 'px';
-        star.style.fontSize = (14 + Math.random()*10) + 'px';
-        const ang = (i/n) * Math.PI*2;
-        const dx = Math.cos(ang) * (radius + Math.random()*40);
-        const dy = Math.sin(ang) * (radius + Math.random()*40);
+        star.style.fontSize = (14 + Math.random() * 10) + 'px';
+        const ang = (i / n) * Math.PI * 2;
+        const dx = Math.cos(ang) * (radius + Math.random() * 40);
+        const dy = Math.sin(ang) * (radius + Math.random() * 40);
         star.animate([
-          { transform:'translate(-50%,-50%) scale(0.5)', opacity:0 },
-          { transform:`translate(${dx-50}px, ${dy-50}px) scale(1)`, opacity:1, offset:0.4 },
-          { transform:`translate(${dx*1.8-50}px, ${dy*1.8-50}px) scale(0.8)`, opacity:0 }
-        ], { duration: 900 + Math.random()*300, easing:'ease-out', fill:'forwards' });
+          { transform: 'translate(-50%,-50%) scale(0.5)', opacity: 0 },
+          { transform: `translate(${dx - 50}px, ${dy - 50}px) scale(1)`, opacity: 1, offset: 0.4 },
+          { transform: `translate(${dx * 1.8 - 50}px, ${dy * 1.8 - 50}px) scale(0.8)`, opacity: 0 }
+        ], { duration: 900 + Math.random() * 300, easing: 'ease-out', fill: 'forwards' });
         layer.appendChild(star);
       }
       setTimeout(() => layer.remove(), 1400);
@@ -530,16 +1229,16 @@
       ring.style.opacity = '0.9';
       stage.appendChild(ring);
       ring.animate([
-        { transform:'translate(-50%,-50%) scale(1)', opacity:0.9 },
-        { transform:'translate(-50%,-50%) scale(20)', opacity:0 }
-      ], { duration: 900, easing: 'ease-out', fill:'forwards' });
-      setTimeout(()=>ring.remove(), 1000);
+        { transform: 'translate(-50%,-50%) scale(1)', opacity: 0.9 },
+        { transform: 'translate(-50%,-50%) scale(20)', opacity: 0 }
+      ], { duration: 900, easing: 'ease-out', fill: 'forwards' });
+      setTimeout(() => ring.remove(), 1000);
     }
 
     function centerOf(el, relativeTo) {
       const r1 = el.getBoundingClientRect();
       const r2 = relativeTo.getBoundingClientRect();
-      return { x: r1.left - r2.left + r1.width/2, y: r1.top - r2.top + r1.height/2 };
+      return { x: r1.left - r2.left + r1.width / 2, y: r1.top - r2.top + r1.height / 2 };
     }
 
     /* ---------- Clear with exit animations ---------- */
@@ -578,111 +1277,111 @@
       setDisplay('');
 
       // Pick and run an exit animation on the ghost
-      const fn = exitAnimations[Math.floor(Math.random()*exitAnimations.length)];
+      const fn = exitAnimations[Math.floor(Math.random() * exitAnimations.length)];
       fn(ghost, stage);
     }
 
     // --- Exit animation implementations ---
 
     // Rocket exits up-right with trail of copies
-    function rocketExit(ghost, root){
+    function rocketExit(ghost, root) {
       const start = ghost.getBoundingClientRect();
       const copies = 6;
-      for (let i=0;i<copies;i++){
+      for (let i = 0; i < copies; i++) {
         const c = ghost.cloneNode(true);
-        c.style.opacity = 0.12 + (i*0.05);
+        c.style.opacity = 0.12 + (i * 0.05);
         c.style.filter = 'blur(1px)';
         root.appendChild(c);
         c.animate([
-          { transform:'translate(0,0) scale(1)' },
-          { transform:`translate(${60+ i*18}px, ${-120 - i*24}px) scale(${0.9 - i*0.06})`, opacity:0 }
-        ], { duration: 900, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards' });
-        setTimeout(()=>c.remove(), 950);
+          { transform: 'translate(0,0) scale(1)' },
+          { transform: `translate(${60 + i * 18}px, ${-120 - i * 24}px) scale(${0.9 - i * 0.06})`, opacity: 0 }
+        ], { duration: 900, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' });
+        setTimeout(() => c.remove(), 950);
       }
       ghost.animate([
-        { transform:'translate(0,0) rotate(0deg)', offset:0 },
-        { transform:'translate(12px,-18px) rotate(8deg)', offset:0.2 },
-        { transform:`translate(${start.width*0.8}px, ${-start.height*1.4}px) rotate(18deg)`, opacity:0 }
-      ], { duration: 850, easing:'ease-in', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 900);
+        { transform: 'translate(0,0) rotate(0deg)', offset: 0 },
+        { transform: 'translate(12px,-18px) rotate(8deg)', offset: 0.2 },
+        { transform: `translate(${start.width * 0.8}px, ${-start.height * 1.4}px) rotate(18deg)`, opacity: 0 }
+      ], { duration: 850, easing: 'ease-in', fill: 'forwards' });
+      setTimeout(() => ghost.remove(), 900);
     }
 
     // Tumbles diagonally out
-    function tumbleOff(ghost){
+    function tumbleOff(ghost) {
       ghost.animate([
-        { transform:'translate(0,0) rotate(0deg)', opacity:1 },
-        { transform:'translate(120px,-80px) rotate(180deg) scale(0.7)', opacity:0 }
-      ], { duration: 800, easing:'ease-in-out', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 820);
+        { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+        { transform: 'translate(120px,-80px) rotate(180deg) scale(0.7)', opacity: 0 }
+      ], { duration: 800, easing: 'ease-in-out', fill: 'forwards' });
+      setTimeout(() => ghost.remove(), 820);
     }
 
     // Slides down and fades
-    function slideDownFade(ghost){
+    function slideDownFade(ghost) {
       ghost.animate([
-        { transform:'translate(0,0)', opacity:1 },
-        { transform:'translate(0,120%)', opacity:0 }
-      ], { duration: 600, easing:'ease-in', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 620);
+        { transform: 'translate(0,0)', opacity: 1 },
+        { transform: 'translate(0,120%)', opacity: 0 }
+      ], { duration: 600, easing: 'ease-in', fill: 'forwards' });
+      setTimeout(() => ghost.remove(), 620);
     }
 
     // Swirls into a tiny point
-    function swirlAway(ghost){
+    function swirlAway(ghost) {
       ghost.animate([
-        { transform:'translate(0,0) rotate(0deg) scale(1)', opacity:1 },
-        { transform:'translate(0,0) rotate(540deg) scale(0.05)', opacity:0 }
-      ], { duration: 900, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 920);
+        { transform: 'translate(0,0) rotate(0deg) scale(1)', opacity: 1 },
+        { transform: 'translate(0,0) rotate(540deg) scale(0.05)', opacity: 0 }
+      ], { duration: 900, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' });
+      setTimeout(() => ghost.remove(), 920);
     }
 
     // Pops into confetti
-    function popExplode(ghost){
+    function popExplode(ghost) {
       const center = centerOf(ghost, stage);
       confettiAt(center.x, center.y);
       ghost.animate([
-        { transform:'scale(1)', opacity:1 },
-        { transform:'scale(0.6)', opacity:0 }
-      ], { duration: 220, easing:'ease-out', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 240);
+        { transform: 'scale(1)', opacity: 1 },
+        { transform: 'scale(0.6)', opacity: 0 }
+      ], { duration: 220, easing: 'ease-out', fill: 'forwards' });
+      setTimeout(() => ghost.remove(), 240);
     }
 
     // Gentle drift up and fade
-    function driftUp(ghost){
+    function driftUp(ghost) {
       ghost.animate([
-        { transform:'translateY(0)', opacity:1 },
-        { transform:'translateY(-80px)', opacity:0 }
-      ], { duration: 700, easing:'ease-out', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 740);
+        { transform: 'translateY(0)', opacity: 1 },
+        { transform: 'translateY(-80px)', opacity: 0 }
+      ], { duration: 700, easing: 'ease-out', fill: 'forwards' });
+      setTimeout(() => ghost.remove(), 740);
     }
 
     // Flip then drop out bottom
-    function flipDrop(ghost){
+    function flipDrop(ghost) {
       ghost.style.transformOrigin = '50% 60%';
       ghost.animate([
-        { transform:'rotateX(0deg) translateY(0)', opacity:1 },
-        { transform:'rotateX(80deg) translateY(20px)', opacity:0.9, offset:0.3 },
-        { transform:'rotateX(100deg) translateY(140%)', opacity:0 }
-      ], { duration: 800, easing:'ease-in', fill:'forwards' });
-      setTimeout(()=>ghost.remove(), 820);
+        { transform: 'rotateX(0deg) translateY(0)', opacity: 1 },
+        { transform: 'rotateX(80deg) translateY(20px)', opacity: 0.9, offset: 0.3 },
+        { transform: 'rotateX(100deg) translateY(140%)', opacity: 0 }
+      ], { duration: 800, easing: 'ease-in', fill: 'forwards' });
+      setTimeout(() => ghost.remove(), 820);
     }
 
     // helper to spawn confetti at custom point (used by popExplode)
-    function confettiAt(x, y){
+    function confettiAt(x, y) {
       const layer = document.createElement('div');
       layer.className = 'confetti';
       stage.appendChild(layer);
-      const colors = [ 'var(--accent)', 'var(--accent-2)', 'var(--accent-3)', 'var(--accent-4)', 'var(--accent-5)' ];
+      const colors = ['var(--accent)', 'var(--accent-2)', 'var(--accent-3)', 'var(--accent-4)', 'var(--accent-5)'];
       const count = 24 + Math.floor(Math.random() * 20);
       for (let i = 0; i < count; i++) {
         const dot = document.createElement('i');
         dot.style.left = x + 'px';
         dot.style.top = y + 'px';
         dot.style.background = colors[i % colors.length];
-        dot.style.width = (6 + Math.random()*6)+'px';
+        dot.style.width = (6 + Math.random() * 6) + 'px';
         dot.style.height = dot.style.width;
         dot.animate([
-          { transform:'translate(-50%,-50%) translateX(0) translateY(-10px) rotate(0deg)', opacity:0.9 },
-          { transform:`translate(-50%,-50%) translateX(${Math.random()*200-100}px) translateY(${100 + Math.random()*120}px) rotate(${Math.random()*360}deg)`, opacity:0 }
-        ], { duration: 700 + Math.random()*300, easing:'ease-out', fill:'forwards' });
+          { transform: 'translate(-50%,-50%) translateX(0) translateY(-10px) rotate(0deg)', opacity: 0.9 },
+          { transform: `translate(-50%,-50%) translateX(${Math.random() * 200 - 100}px) translateY(${100 + Math.random() * 120}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+        ], { duration: 700 + Math.random() * 300, easing: 'ease-out', fill: 'forwards' });
         layer.appendChild(dot);
       }
       setTimeout(() => layer.remove(), 1200);
@@ -691,6 +1390,51 @@
     // Init
     stage.classList.add('align-center');
     setDisplay('');
+
+    /* -------- Auto-resize -------- */
+    function autoResize() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      // Simple logic: smaller screens = smaller buttons, larger letters
+      // We can map width to btn-size
+      let bs = 1;
+      if (w >= 400) bs = 2;
+      if (w >= 600) bs = 3;
+      if (w >= 800) bs = 4;
+      if (w >= 1000) bs = 5;
+
+      // Only apply if user hasn't manually overridden
+      if (!userHasSetButtonSize) {
+        document.body.classList.remove('btn-size-1', 'btn-size-2', 'btn-size-3', 'btn-size-4', 'btn-size-5', 'keyboard-hidden');
+        document.body.classList.add('btn-size-' + bs);
+        buttonStep = bs;
+        buttonsToggle.textContent = 'Buttons';
+      }
+
+      // Adjust letter size based on height
+      // 40vh..120vh
+      let ls = 3; // default 80vh
+      if (h < 400) ls = 1; // 40vh
+      else if (h < 600) ls = 2; // 60vh
+      else if (h < 800) ls = 3; // 80vh
+      else ls = 4; // 100vh
+
+      letterStep = ls;
+      display.style.fontSize = letterSizes[letterStep - 1];
+    }
+
+    window.addEventListener('resize', () => {
+      // Debounce slightly
+      clearTimeout(window.resizeTimer);
+      window.resizeTimer = setTimeout(() => {
+        autoResize();
+        fitText(); // Re-fit on resize
+      }, 200);
+    });
+
+    // Run once on load
+    autoResize();
   </script>
 </body>
+
 </html>
