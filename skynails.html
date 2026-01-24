@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Nails & Spa | Where Beauty Meets Relaxation | Cathedral City, CA</title>
+    <meta name="description" content="Sky Nails & Spa in Cathedral City, CA offers professional manicures, pedicures, gel nails, acrylics, and more. Experience relaxation with complimentary drinks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sky-light: #E8F4F8;
+            --sky-blue: #87CEEB;
+            --sky-medium: #7EC8E3;
+            --powder-blue: #B0E0E6;
+            --lavender: #E6E6FA;
+            --lavender-soft: #F0F0FF;
+            --white: #FFFFFF;
+            --silver: #C0C0C0;
+            --silver-light: #E8E8E8;
+            --text-dark: #2C3E50;
+            --text-medium: #5D6D7E;
+            --text-light: #85929E;
+            --gold: #D4AF37;
+            --gold-light: #F5E6B8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+        }
+
+        /* Floating Clouds Animation */
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .cloud {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(176,224,230,0.3) 100%);
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.5;
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .cloud:nth-child(1) {
+            width: 300px;
+            height: 150px;
+            top: 10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .cloud:nth-child(2) {
+            width: 400px;
+            height: 200px;
+            top: 30%;
+            right: -15%;
+            animation-delay: -5s;
+            animation-duration: 30s;
+        }
+
+        .cloud:nth-child(3) {
+            width: 250px;
+            height: 120px;
+            top: 60%;
+            left: 5%;
+            animation-delay: -10s;
+            animation-duration: 28s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateX(0) translateY(0);
+            }
+            25% {
+                transform: translateX(30px) translateY(-20px);
+            }
+            50% {
+                transform: translateX(60px) translateY(10px);
+            }
+            75% {
+                transform: translateX(30px) translateY(20px);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 30px rgba(135, 206, 235, 0.15);
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .logo-text::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 20px;
+            background: linear-gradient(to bottom, var(--sky-blue), transparent);
+            border-radius: 50% 50% 0 0;
+            opacity: 0.6;
+        }
+
+        .logo-tagline {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-medium);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--sky-blue), var(--lavender));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--sky-medium);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-phone {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+            border: 2px solid var(--sky-blue);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-phone:hover {
+            background: var(--sky-blue);
+            color: var(--white);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 2px;
+            background: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(180deg, var(--sky-light) 0%, var(--white) 50%, var(--lavender-soft) 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://places.googleapis.com/v1/places/ChIJpQ__Rywd24ARkRAqLgFxDAU/photos/AcnlKN2p60XWTwTYILqJ7l-snFXW9ro2SkH1GzJstygJHIaHm_kSzAgbVxwgt5QuphA7p2uYK0lyX_F8GEDowYmwF29vj_PE2I63jrKZO48zvp2stvIEmUwvKfUAo0_P6XxDXK6exsJAwJIrp_Z6IAyymlpjN9hw3ZrzfCW2wRgQwunryIT3jmp_WjyP7e6iKSTdykEwMoGYYeItJn3x5zkUFI1SxWmWQOsw1OF5HB7HtFyuPhQ63jmSTEPCsErSVnOMCCYFWwzEIWu-csOroFuTnGv2vCmEfHqubwibEIIImgT3nw/media?maxHeightPx=900&maxWidthPx=1200&key=AIzaSyBEaE3XL73SBFav36vSv8JuiuUT1CYZy3c') center/cover no-repeat;
+            opacity: 0.15;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--white) 100%);
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .stars {
+            color: var(--gold);
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .rating-text {
+            font-size: 0.85rem;
+            color: var(--text-medium);
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            letter-spacing: 4px;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            display: block;
+            font-size: 5rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--text-dark) 50%, var(--lavender) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--text-medium);
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2.5rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--sky-medium) 100%);
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(135, 206, 235, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 2px solid var(--silver-light);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--sky-blue);
+            color: var(--sky-medium);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--sky-blue), transparent);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Section Styling */
+        section {
+            padding: 6rem 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--sky-blue), var(--lavender));
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            color: var(--text-medium);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 1.5rem auto 0;
+        }
+
+        /* About Section */
+        .about {
+            background: linear-gradient(180deg, var(--white) 0%, var(--sky-light) 100%);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(135, 206, 235, 0.2);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--sky-blue);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .about-text h3 {
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            color: var(--text-medium);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .perk-highlight {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, var(--lavender-soft) 0%, var(--white) 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            border-left: 4px solid var(--lavender);
+        }
+
+        .perk-icon {
+            font-size: 2.5rem;
+        }
+
+        .perk-text h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .perk-text p {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            margin: 0;
+        }
+
+        /* Staff Section */
+        .staff {
+            background: var(--white);
+        }
+
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .staff-card {
+            background: linear-gradient(135deg, var(--sky-light) 0%, var(--lavender-soft) 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .staff-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(135, 206, 235, 0.2);
+        }
+
+        .staff-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--lavender) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        .staff-card h3 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .staff-card .role {
+            color: var(--sky-medium);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .staff-card p {
+            color: var(--text-medium);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Services Section */
+        .services {
+            background: linear-gradient(180deg, var(--sky-light) 0%, var(--lavender-soft) 50%, var(--white) 100%);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--sky-blue);
+            box-shadow: 0 15px 40px rgba(135, 206, 235, 0.15);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .service-card p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            background: var(--white);
+            padding: 4rem 5%;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(135, 206, 235, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background: linear-gradient(180deg, var(--lavender-soft) 0%, var(--sky-light) 100%);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(135, 206, 235, 0.1);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            color: var(--sky-blue);
+            opacity: 0.2;
+            line-height: 1;
+        }
+
+        .testimonial-stars {
+            color: var(--gold);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-card p {
+            color: var(--text-medium);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sky-blue), var(--lavender));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .author-verified {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Location Section */
+        .location {
+            background: var(--white);
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .location-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-card {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--sky-light) 0%, var(--white) 100%);
+            border-radius: 15px;
+        }
+
+        .info-icon {
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(135, 206, 235, 0.15);
+        }
+
+        .info-details h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-details p, .info-details a {
+            color: var(--text-dark);
+            font-size: 1.05rem;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .info-details a:hover {
+            color: var(--sky-medium);
+        }
+
+        .hours-list {
+            list-style: none;
+        }
+
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--silver-light);
+            color: var(--text-medium);
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        .hours-list .day {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .hours-list .closed {
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .location-map {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(135, 206, 235, 0.2);
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            border: none;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(180deg, var(--sky-light) 0%, var(--text-dark) 100%);
+            padding: 4rem 5% 2rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--text-medium);
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .footer-cta {
+            margin-bottom: 3rem;
+        }
+
+        .footer-divider {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--silver), transparent);
+            margin: 2rem auto;
+        }
+
+        .footer-bottom {
+            color: var(--white);
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .footer-bottom a {
+            color: var(--sky-blue);
+            text-decoration: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero h1 span {
+                font-size: 3.5rem;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 4rem 5%;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero h1 span {
+                font-size: 3rem;
+            }
+
+            .hero-tagline {
+                font-size: 1.2rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .about-content,
+            .location-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .about-image::before {
+                display: none;
+            }
+
+            .staff-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-phone span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero h1 span {
+                font-size: 2.5rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Clouds Background -->
+    <div class="clouds">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="logo">
+            <span class="logo-text">Sky Nails & Spa</span>
+            <span class="logo-tagline">Cathedral City, CA</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#team">Our Team</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#visit">Visit Us</a></li>
+        </ul>
+        <a href="tel:+17603243139" class="nav-phone">
+            <span>Call Now</span> (760) 324-3139
+        </a>
+        <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <span class="mobile-menu-close" onclick="toggleMobileMenu()">&times;</span>
+        <a href="#about" onclick="toggleMobileMenu()">About</a>
+        <a href="#team" onclick="toggleMobileMenu()">Our Team</a>
+        <a href="#services" onclick="toggleMobileMenu()">Services</a>
+        <a href="#reviews" onclick="toggleMobileMenu()">Reviews</a>
+        <a href="#visit" onclick="toggleMobileMenu()">Visit Us</a>
+        <a href="tel:+17603243139">(760) 324-3139</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                <span class="rating-text">4.5 Stars | 394 Reviews</span>
+            </div>
+            <h1>
+                <span>Sky Nails & Spa</span>
+            </h1>
+            <p class="hero-tagline">Where Beauty Meets Relaxation</p>
+            <div class="hero-cta">
+                <a href="tel:+17603243139" class="btn btn-primary">
+                    Book Your Visit
+                </a>
+                <a href="https://maps.google.com/?cid=363789919793582225" target="_blank" class="btn btn-secondary">
+                    Get Directions
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            Scroll
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content">
+            <div class="about-image">
+                <img src="https://places.googleapis.com/v1/places/ChIJpQ__Rywd24ARkRAqLgFxDAU/photos/AcnlKN20xyZc3X-DiboXFXNqn_HnaBnfmEJK8mJn9YCnKQ20_Phdsvn_MHcWYGfPKeoM_DlNn7dzDGLg1mcMGYxIE93Mz3W9ZQF5Gcf0cwpxN7Y-PSnO4H9igkSYkxp5C7zGzrd9aAMP44T17QMkvLRvyIHuCZf0mPu3uZv2z44upKJRZH2kIEyvJmoQGaoViCSkOSDReFjOetU6DRaw9GlZrQPR94EdAW2bZ9ZOGc4oGGxqaROZcLemG_Wx3MqHIcGDzFcyt9KtVnWsnoMdYy13cT72dFlSOkqD_MrbtizWIuOFAQ/media?maxHeightPx=800&maxWidthPx=800&key=AIzaSyBEaE3XL73SBFav36vSv8JuiuUT1CYZy3c" alt="Sky Nails & Spa Interior">
+            </div>
+            <div class="about-text">
+                <h3>Your Sanctuary for Self-Care</h3>
+                <p>Welcome to Sky Nails & Spa, Cathedral City's premier destination for nail artistry and relaxation. From the moment you step through our doors, you'll be greeted with authentic warmth and an atmosphere designed to melt your stress away.</p>
+                <p>Our talented team of nail technicians combines years of expertise with a genuine passion for making you feel beautiful. Whether you're seeking a classic manicure or intricate nail art, we listen to your vision and bring it to life with precision and care.</p>
+                <div class="perk-highlight">
+                    <span class="perk-icon">&#127863;</span>
+                    <div class="perk-text">
+                        <h4>Complimentary Beverages</h4>
+                        <p>Relax with a refreshing drink on us while you enjoy your service</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Staff Section -->
+    <section class="staff" id="team">
+        <div class="section-header">
+            <h2>Meet Our Artists</h2>
+            <p>Talented professionals dedicated to making you feel beautiful</p>
+        </div>
+        <div class="staff-grid">
+            <div class="staff-card">
+                <div class="staff-avatar">D</div>
+                <h3>Dominique</h3>
+                <span class="role">Nail Artist</span>
+                <p>Known for creating beautiful nail designs that exceed expectations. Dominique takes the time to truly listen and ensures every client walks out feeling confident and beautiful.</p>
+            </div>
+            <div class="staff-card">
+                <div class="staff-avatar">H</div>
+                <h3>Helene</h3>
+                <span class="role">Expert Nail Technician</span>
+                <p>With a loyal following from across the Coachella Valley, Helene has earned a reputation for perfecting nail shape, color, and design. Her expertise keeps clients coming back for years.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <h2>Our Services</h2>
+            <p>Comprehensive nail care and beauty treatments tailored to you</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">&#128133;</div>
+                <h3>Manicures</h3>
+                <p>Classic & deluxe options</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#129526;</div>
+                <h3>Pedicures</h3>
+                <p>Relaxing foot treatments</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#10024;</div>
+                <h3>Gel Nails</h3>
+                <p>Long-lasting shine</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#128142;</div>
+                <h3>Acrylic Nails</h3>
+                <p>Durable extensions</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#127912;</div>
+                <h3>Dip Powder</h3>
+                <p>Lightweight & strong</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#127752;</div>
+                <h3>Nail Art</h3>
+                <p>Custom designs</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#128065;</div>
+                <h3>Lash Extensions</h3>
+                <p>Beautiful lashes</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#127800;</div>
+                <h3>Waxing</h3>
+                <p>Smooth results</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery">
+        <div class="section-header">
+            <h2>Our Work</h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://places.googleapis.com/v1/places/ChIJpQ__Rywd24ARkRAqLgFxDAU/photos/AcnlKN20xyZc3X-DiboXFXNqn_HnaBnfmEJK8mJn9YCnKQ20_Phdsvn_MHcWYGfPKeoM_DlNn7dzDGLg1mcMGYxIE93Mz3W9ZQF5Gcf0cwpxN7Y-PSnO4H9igkSYkxp5C7zGzrd9aAMP44T17QMkvLRvyIHuCZf0mPu3uZv2z44upKJRZH2kIEyvJmoQGaoViCSkOSDReFjOetU6DRaw9GlZrQPR94EdAW2bZ9ZOGc4oGGxqaROZcLemG_Wx3MqHIcGDzFcyt9KtVnWsnoMdYy13cT72dFlSOkqD_MrbtizWIuOFAQ/media?maxHeightPx=800&maxWidthPx=800&key=AIzaSyBEaE3XL73SBFav36vSv8JuiuUT1CYZy3c" alt="Sky Nails Gallery 1">
+            </div>
+            <div class="gallery-item">
+                <img src="https://places.googleapis.com/v1/places/ChIJpQ__Rywd24ARkRAqLgFxDAU/photos/AcnlKN3wJE8KO9nWzZ_HhgvF8WUjIbGMBpMYfpG_BWO6_TPRv7bukbZ98h7nNQawYe9gn2u8zEgQX44rqqjlOX3TNM1jpeaxZzDptukMdI6qYg_4Sd5j6YFEbIgiNNOuPQc41o1RR0oYt3dlzMOZ73z_-WHlzwzi7tn_P_zuQvXvJaJO10OIJkPCWDXwaD9mW8msLuOH9X4g6-o77zFewX1ZrvHHh-jpPcYo7vpEYtPdKzXVHZ_3oAvuqiCsZh8ROAOC6tOInqciQh145-7VF21jeiCNp37FUm1Sfr_U0yZ6Fygm2w/media?maxHeightPx=800&maxWidthPx=800&key=AIzaSyBEaE3XL73SBFav36vSv8JuiuUT1CYZy3c" alt="Sky Nails Gallery 2">
+            </div>
+            <div class="gallery-item">
+                <img src="https://places.googleapis.com/v1/places/ChIJpQ__Rywd24ARkRAqLgFxDAU/photos/AcnlKN1O3_YR-F9O-6Id7GYhtAkC8ZB8gh9Kkz3agj24dggQVhUcN3uY7odaGbpJHNSGfe5P3E7FeZZYfQWssRJZ_DHbOdyj6D7Xw0z2tBzuodOVpNOlMRU0zUzgBKSSTviGYJON1IOQcgb3G2bmG8JCbC-MojANLyyCYFBZnUNukTbKhElhjIYknY97mEKGQsv6Lji45GOX8rT2wCLozO6bK8GqXH8lP8fYCNkMytPi18cUu9mjbx8Zliw-gwBCKkWG_K4HvTiROF5coWBBH0y0iWaFdeybzACMsBG5rr7n63qJWQ/media?maxHeightPx=800&maxWidthPx=800&key=AIzaSyBEaE3XL73SBFav36vSv8JuiuUT1CYZy3c" alt="Sky Nails Gallery 3">
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="reviews">
+        <div class="section-header">
+            <h2>What Our Guests Say</h2>
+            <p>Real experiences from our valued clients</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p>"From the moment I walked in, I felt welcome with an authentic smile. Dominique took the time to listen to me and make sure I walked out with what I needed. A phenomenal experience. Most impressed was how reasonable their prices are! Definitely 5+ STARS."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">BB</div>
+                    <div>
+                        <div class="author-name">Brenda B.</div>
+                        <div class="author-verified">Verified Customer</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p>"I followed Helene from Indio. Once I actually found someone that gives me what I want - nail shape, color, design - that was it. I'll follow you Helene wherever you go. Thank you for always making me feel pretty!"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">AA</div>
+                    <div>
+                        <div class="author-name">Alyssa A.</div>
+                        <div class="author-verified">Loyal Client</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p>"Extremely friendly! Great professional job! Amazing pedicure! Last minute New Year's Eve appointment and not for one second were we made to feel like a burden. Offered us complimentary drinks to choose from. Great surprise find, we will be back!"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">CP</div>
+                    <div>
+                        <div class="author-name">Cheryl P.</div>
+                        <div class="author-verified">Verified Customer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="location" id="visit">
+        <div class="section-header">
+            <h2>Visit Us</h2>
+            <p>We look forward to welcoming you</p>
+        </div>
+        <div class="location-content">
+            <div class="location-info">
+                <div class="info-card">
+                    <div class="info-icon">&#128205;</div>
+                    <div class="info-details">
+                        <h4>Address</h4>
+                        <a href="https://maps.google.com/?cid=363789919793582225" target="_blank">
+                            34041 Date Palm Dr<br>Cathedral City, CA 92234
+                        </a>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">&#128222;</div>
+                    <div class="info-details">
+                        <h4>Phone</h4>
+                        <a href="tel:+17603243139">(760) 324-3139</a>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">&#128336;</div>
+                    <div class="info-details">
+                        <h4>Hours</h4>
+                        <ul class="hours-list">
+                            <li><span class="day">Monday</span><span>9:00 AM - 7:00 PM</span></li>
+                            <li><span class="day">Tuesday</span><span>9:00 AM - 7:00 PM</span></li>
+                            <li><span class="day">Wednesday</span><span>9:00 AM - 7:00 PM</span></li>
+                            <li><span class="day">Thursday</span><span>9:00 AM - 7:00 PM</span></li>
+                            <li><span class="day">Friday</span><span>9:00 AM - 7:00 PM</span></li>
+                            <li><span class="day">Saturday</span><span>9:00 AM - 7:00 PM</span></li>
+                            <li><span class="day">Sunday</span><span class="closed">Closed</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="location-map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3316.8!2d-116.4585!3d33.8177!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80db1d2c477fff00%3A0x050c7101002a1091!2s34041%20Date%20Palm%20Dr%2C%20Cathedral%20City%2C%20CA%2092234!5e0!3m2!1sen!2sus!4v1234567890"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Sky Nails & Spa Location">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">Sky Nails & Spa</div>
+        <p class="footer-tagline">Where Beauty Meets Relaxation</p>
+        <div class="footer-cta">
+            <a href="tel:+17603243139" class="btn btn-primary">
+                Call (760) 324-3139
+            </a>
+        </div>
+        <div class="footer-divider"></div>
+        <p class="footer-bottom">
+            &copy; 2024 Sky Nails & Spa. All rights reserved.<br>
+            34041 Date Palm Dr, Cathedral City, CA 92234
+        </p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const navHeight = navbar.offsetHeight;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Add animation styles to elements
+        document.querySelectorAll('.service-card, .staff-card, .testimonial-card, .info-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
